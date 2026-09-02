@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Penggunaan Material Produksi — Sistem Manajemen Data UPQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="app-shell" id="app-shell"></div>
+
+<template id="page-template">
+  <div class="rounded-xl bg-[var(--brand-50)] p-4 text-sm text-[var(--brand-800)] mb-6 flex gap-3">
+    <i class="fa-solid fa-circle-info mt-0.5"></i>
+    <span>Modul ini mencatat pemakaian raw material dari gudang untuk setiap batch/perintah kerja (Work Order) produksi Mushaf Al-Qur'an, sekaligus memperbarui sisa stok secara otomatis.</span>
+  </div>
+
+  <div class="card p-5 md:p-6">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
+      <h3 class="font-bold text-[15px] text-[var(--ink-900)]">Riwayat Penggunaan Material</h3>
+      <div class="flex gap-3">
+        <div class="input-icon-wrap w-56"><i class="fa-solid fa-magnifying-glass text-sm"></i><input id="search-guna" class="input !py-2 text-sm" placeholder="Cari batch / item..."></div>
+        <button onclick="openModal('modal-guna')" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i>Catat Penggunaan</button>
+      </div>
+    </div>
+    <div class="table-wrap !border-none">
+      <table class="data-table">
+        <thead><tr><th>No. WO</th><th>Batch Produksi</th><th>Item Digunakan</th><th>Qty Dipakai</th><th>Sisa Stok</th><th>Tgl. Pakai</th><th>Petugas</th><th>Status</th></tr></thead>
+        <tbody id="tbl-guna"></tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<div id="modal-guna" class="modal-backdrop hidden">
+  <div class="modal-box">
+    <div class="flex items-center justify-between px-6 py-5 border-b border-[var(--line)]">
+      <h3 class="font-display font-bold text-lg text-[var(--ink-900)]">Catat Penggunaan Material</h3>
+      <button onclick="closeModal('modal-guna')" class="text-[var(--ink-300)] hover:text-[var(--ink-900)]"><i class="fa-solid fa-xmark text-lg"></i></button>
+    </div>
+    <form class="p-6 space-y-4" onsubmit="event.preventDefault(); closeModal('modal-guna');">
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div><label class="field-label">No. WO (Otomatis)</label><input class="input" value="WO-3306" disabled></div>
+        <div><label class="field-label">Batch Produksi Tujuan</label><select class="input"><option>Batch Cetak Mushaf Standar #115</option><option>Batch Cetak Mushaf Cover Hard #58</option><option>Batch Jilid Mushaf #213</option></select></div>
+      </div>
+      <div><label class="field-label">Item Material</label><select class="input"><option>Kertas HVS 60gr</option><option>Tinta Offset Hitam</option><option>Karton Cover Hardcover 350gr</option><option>Benang Jahit Jilid</option></select></div>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div><label class="field-label">Jumlah Dipakai</label><input class="input" placeholder="Contoh: 500 rim"></div>
+        <div><label class="field-label">Tanggal Pemakaian</label><input type="date" class="input"></div>
+      </div>
+      <div><label class="field-label">Petugas Pencatat</label><input class="input" placeholder="Nama petugas"></div>
+      <div class="flex justify-end gap-3 pt-2">
+        <button type="button" onclick="closeModal('modal-guna')" class="btn btn-line">Batal</button>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i>Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/data.js"></script>
+<script>
+  renderInternalShell({ active: "penggunaan-material", title: "Penggunaan Material Produksi", breadcrumb: ["Internal","Proses Produksi","Penggunaan Material"] });
+  document.getElementById("page-content").innerHTML = document.getElementById("page-template").innerHTML;
+
+  const rowTpl = r => `
+    <tr>
+      <td class="font-bold text-[var(--ink-900)]">${r.id}</td>
+      <td>${r.batch}</td>
+      <td>${r.item}</td>
+      <td>${r.qtyPakai}</td>
+      <td>${r.sisaStok}</td>
+      <td>${r.tglPakai}</td>
+      <td>${r.petugas}</td>
+      <td>${badge(r.status)}</td>
+    </tr>`;
+  renderRows("tbl-guna", DATA_PENGGUNAAN, rowTpl);
+  attachSearchFilter("search-guna", () => DATA_PENGGUNAAN, "tbl-guna", rowTpl, ["id","batch","item"]);
+</script>
+</body>
+</html>

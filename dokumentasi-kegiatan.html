@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dokumentasi Kegiatan — UPQ Kemenag RI</title>
+<meta name="description" content="Galeri dokumentasi kegiatan produksi, kunjungan literasi, dan seremonial Unit Percetakan Al-Qur'an.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<section class="bg-brand-gradient bg-noise-pattern py-14">
+  <div class="container text-white">
+    <div class="text-xs text-white/70 mb-3"><a href="index.html" class="hover:text-white">Beranda</a> <i class="fa-solid fa-chevron-right text-[9px] mx-1"></i> Dokumentasi Kegiatan</div>
+    <h1 class="font-display font-extrabold text-3xl md:text-4xl">Dokumentasi Kegiatan</h1>
+    <p class="text-white/80 mt-3 max-w-2xl text-sm md:text-base">Rekam jejak visual seluruh kegiatan produksi, kunjungan literasi, pelatihan, dan seremonial UPQ.</p>
+  </div>
+</section>
+
+<section class="container py-12">
+  <!-- filter -->
+  <div class="flex flex-col md:flex-row gap-4 md:items-center md:justify-between mb-8">
+    <div class="flex flex-wrap gap-2" id="kategori-filter">
+      <button data-kategori="Semua" class="btn btn-sm btn-primary kategori-btn">Semua</button>
+      <button data-kategori="Produksi" class="btn btn-sm btn-line kategori-btn">Produksi</button>
+      <button data-kategori="Kunjungan Literasi" class="btn btn-sm btn-line kategori-btn">Kunjungan Literasi</button>
+      <button data-kategori="Pelatihan" class="btn btn-sm btn-line kategori-btn">Pelatihan</button>
+      <button data-kategori="Seremonial" class="btn btn-sm btn-line kategori-btn">Seremonial</button>
+    </div>
+    <div class="input-icon-wrap w-full md:w-72">
+      <i class="fa-solid fa-magnifying-glass text-sm"></i>
+      <input id="doc-search" class="input" placeholder="Cari dokumentasi...">
+    </div>
+  </div>
+
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="doc-grid"></div>
+
+  <div class="flex items-center justify-center gap-2 mt-10 no-print">
+    <button class="btn btn-sm btn-ghost"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="btn btn-sm btn-primary !px-4">1</button>
+    <button class="btn btn-sm btn-ghost !px-4">2</button>
+    <button class="btn btn-sm btn-ghost !px-4">3</button>
+    <button class="btn btn-sm btn-ghost"><i class="fa-solid fa-chevron-right"></i></button>
+  </div>
+</section>
+
+<!-- video liputan -->
+<section class="bg-white border-t border-[var(--line)] py-16">
+  <div class="container">
+    <span class="eyebrow">Liputan Video</span>
+    <h2 class="font-display font-extrabold text-2xl mt-2 text-[var(--ink-900)] mb-8">Video Kegiatan UPQ</h2>
+    <div class="grid sm:grid-cols-3 gap-6">
+      <div class="card overflow-hidden card-hover">
+        <div class="photo-ph aspect-video flex items-center justify-center"><div class="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center text-[var(--brand-600)] text-xl relative z-10"><i class="fa-solid fa-play ml-1"></i></div></div>
+        <div class="p-4"><div class="font-bold text-sm">Proses Produksi Mushaf Al-Qur'an UPQ</div><div class="text-xs text-[var(--ink-500)] mt-1">12:04 · Liputan Produksi</div></div>
+      </div>
+      <div class="card overflow-hidden card-hover">
+        <div class="photo-ph aspect-video flex items-center justify-center"><div class="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center text-[var(--brand-600)] text-xl relative z-10"><i class="fa-solid fa-play ml-1"></i></div></div>
+        <div class="p-4"><div class="font-bold text-sm">Serunya Kunjungan Literasi Pelajar</div><div class="text-xs text-[var(--ink-500)] mt-1">08:32 · Liputan Kunjungan</div></div>
+      </div>
+      <div class="card overflow-hidden card-hover">
+        <div class="photo-ph aspect-video flex items-center justify-center"><div class="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center text-[var(--brand-600)] text-xl relative z-10"><i class="fa-solid fa-play ml-1"></i></div></div>
+        <div class="p-4"><div class="font-bold text-sm">Peresmian Lini Produksi Digital</div><div class="text-xs text-[var(--ink-500)] mt-1">05:47 · Liputan Seremonial</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/data.js"></script>
+<script>
+  renderPublicHeader("dokumentasi");
+  renderPublicFooter();
+
+  const iconByKategori = { "Produksi":"fa-industry", "Kunjungan Literasi":"fa-people-group", "Pelatihan":"fa-chalkboard-user", "Seremonial":"fa-flag" };
+
+  function renderDocs(list){
+    document.getElementById("doc-grid").innerHTML = list.length ? list.map(d => `
+      <div class="card card-hover overflow-hidden">
+        <div class="photo-ph aspect-video"><i class="fa-solid ${iconByKategori[d.kategori] || 'fa-image'}"></i></div>
+        <div class="p-5">
+          <span class="badge badge-info mb-2">${d.kategori}</span>
+          <h3 class="font-bold text-[15px] text-[var(--ink-900)] leading-snug">${d.judul}</h3>
+          <div class="text-xs text-[var(--ink-500)] mt-2"><i class="fa-regular fa-calendar mr-1.5"></i>${d.tgl}</div>
+        </div>
+      </div>`).join("") : `<div class="col-span-full text-center py-16 text-[var(--ink-300)]"><i class="fa-solid fa-image text-3xl mb-3 block"></i>Tidak ada dokumentasi ditemukan.</div>`;
+  }
+
+  let activeKategori = "Semua";
+  function applyFilter(){
+    const q = document.getElementById("doc-search").value.trim().toLowerCase();
+    const list = DATA_DOKUMENTASI.filter(d =>
+      (activeKategori === "Semua" || d.kategori === activeKategori) &&
+      (!q || d.judul.toLowerCase().includes(q))
+    );
+    renderDocs(list);
+  }
+
+  document.querySelectorAll(".kategori-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".kategori-btn").forEach(b => b.classList.replace("btn-primary","btn-line"));
+      btn.classList.replace("btn-line","btn-primary");
+      activeKategori = btn.dataset.kategori;
+      applyFilter();
+    });
+  });
+  document.getElementById("doc-search").addEventListener("input", applyFilter);
+  renderDocs(DATA_DOKUMENTASI);
+</script>
+</body>
+</html>

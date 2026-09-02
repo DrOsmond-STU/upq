@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PNBP Pihak Ketiga — Sistem Manajemen Data UPQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="app-shell" id="app-shell"></div>
+
+<template id="page-template">
+  <div class="rounded-xl bg-[var(--brand-50)] p-4 text-sm text-[var(--brand-800)] mb-6 flex gap-3">
+    <i class="fa-solid fa-circle-info mt-0.5"></i>
+    <span>Penerimaan Negara Bukan Pajak (PNBP) untuk layanan jasa percetakan Al-Qur'an bagi pihak ketiga (yayasan, penerbit, korporasi) yang menggunakan fasilitas produksi UPQ, mengacu pada tarif resmi yang berlaku.</span>
+  </div>
+
+  <div class="grid sm:grid-cols-4 gap-5 mb-6">
+    <div class="kpi-card"><div class="text-xs text-[var(--ink-500)] mb-1">Total PNBP Bulan Ini</div><div class="stat-num !text-2xl text-[var(--ink-900)]">Rp 591 jt</div></div>
+    <div class="kpi-card"><div class="text-xs text-[var(--ink-500)] mb-1">Jumlah Permohonan</div><div class="stat-num !text-2xl text-[var(--ink-900)]">6</div></div>
+    <div class="kpi-card"><div class="text-xs text-[var(--ink-500)] mb-1">Menunggu Pembayaran</div><div class="stat-num !text-2xl text-[var(--warn-text)]">1</div></div>
+    <div class="kpi-card"><div class="text-xs text-[var(--ink-500)] mb-1">Lunas</div><div class="stat-num !text-2xl text-[var(--ok-text)]">3</div></div>
+  </div>
+
+  <div class="card p-5 md:p-6 mb-6">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
+      <h3 class="font-bold text-[15px] text-[var(--ink-900)]">Daftar Permohonan Layanan PNBP</h3>
+      <div class="flex gap-3">
+        <div class="input-icon-wrap w-56"><i class="fa-solid fa-magnifying-glass text-sm"></i><input id="search-pnbp" class="input !py-2 text-sm" placeholder="Cari pemohon / no. permohonan..."></div>
+        <button onclick="openModal('modal-pnbp')" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i>Permohonan Baru</button>
+      </div>
+    </div>
+    <div class="table-wrap !border-none">
+      <table class="data-table">
+        <thead><tr><th>No. Permohonan</th><th>Pemohon</th><th>Jenis Layanan</th><th>Volume</th><th>Total Tagihan</th><th>Kode Billing</th><th>Tanggal</th><th>Status</th></tr></thead>
+        <tbody id="tbl-pnbp"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card p-5 md:p-6">
+    <h3 class="font-bold text-[15px] text-[var(--ink-900)] mb-4"><i class="fa-solid fa-tags text-[var(--brand-600)] mr-2"></i>Referensi Tarif PNBP Layanan Cetak UPQ</h3>
+    <div class="table-wrap !border-none">
+      <table class="data-table">
+        <thead><tr><th>Jenis Layanan</th><th>Satuan</th><th>Tarif</th></tr></thead>
+        <tbody id="tbl-tarif"></tbody>
+      </table>
+    </div>
+    <p class="text-xs text-[var(--ink-500)] mt-4"><i class="fa-solid fa-circle-info mr-1"></i>Tarif mengacu pada Peraturan Pemerintah tentang Jenis dan Tarif PNBP yang berlaku pada Kementerian Agama RI.</p>
+  </div>
+</template>
+
+<div id="modal-pnbp" class="modal-backdrop hidden">
+  <div class="modal-box">
+    <div class="flex items-center justify-between px-6 py-5 border-b border-[var(--line)]">
+      <h3 class="font-display font-bold text-lg text-[var(--ink-900)]">Permohonan Layanan PNBP Baru</h3>
+      <button onclick="closeModal('modal-pnbp')" class="text-[var(--ink-300)] hover:text-[var(--ink-900)]"><i class="fa-solid fa-xmark text-lg"></i></button>
+    </div>
+    <form class="p-6 space-y-4" onsubmit="event.preventDefault(); closeModal('modal-pnbp');">
+      <div><label class="field-label">Nama Pemohon / Perusahaan</label><input class="input" placeholder="Nama instansi/perusahaan"></div>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div><label class="field-label">Jenis Layanan</label>
+          <select class="input">
+            <option>Jasa Cetak Mushaf Al-Qur'an Standar</option>
+            <option>Jasa Cetak Mushaf Al-Qur'an Custom</option>
+            <option>Jasa Cetak Juz 'Amma / Buku Saku</option>
+            <option>Sewa Fasilitas Mesin Cetak Offset</option>
+            <option>Sewa Fasilitas Mesin Jilid</option>
+          </select>
+        </div>
+        <div><label class="field-label">Volume / Jumlah</label><input class="input" placeholder="Contoh: 3.000 eks"></div>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div><label class="field-label">Estimasi Total Tagihan</label><input class="input" placeholder="Dihitung otomatis" disabled></div>
+        <div><label class="field-label">Tanggal Permohonan</label><input type="date" class="input"></div>
+      </div>
+      <div><label class="field-label">Upload Surat Permohonan</label>
+        <div class="border-2 border-dashed border-[var(--line)] rounded-xl p-5 text-center text-sm text-[var(--ink-500)] hover:border-[var(--brand-400)] transition cursor-pointer">
+          <i class="fa-solid fa-cloud-arrow-up text-xl text-[var(--brand-500)] mb-1 block"></i>Klik atau seret file (PDF, maks. 5MB)
+        </div>
+      </div>
+      <div class="flex justify-end gap-3 pt-2">
+        <button type="button" onclick="closeModal('modal-pnbp')" class="btn btn-line">Batal</button>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i>Ajukan Permohonan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/data.js"></script>
+<script>
+  renderInternalShell({ active: "pnbp", title: "PNBP Pihak Ketiga", breadcrumb: ["Internal","PNBP Pihak Ketiga"] });
+  document.getElementById("page-content").innerHTML = document.getElementById("page-template").innerHTML;
+
+  const rowTpl = r => `
+    <tr>
+      <td class="font-bold text-[var(--ink-900)]">${r.id}</td>
+      <td>${r.pemohon}</td>
+      <td>${r.layanan}</td>
+      <td>${r.volume}</td>
+      <td class="font-bold">${r.total}</td>
+      <td class="font-mono text-xs">${r.billing}</td>
+      <td>${r.tgl}</td>
+      <td>${badge(r.status)}</td>
+    </tr>`;
+  renderRows("tbl-pnbp", DATA_PNBP, rowTpl);
+  attachSearchFilter("search-pnbp", () => DATA_PNBP, "tbl-pnbp", rowTpl, ["id","pemohon"]);
+
+  document.getElementById("tbl-tarif").innerHTML = PNBP_TARIF_REF.map(t => `
+    <tr><td>${t.layanan}</td><td>${t.satuan}</td><td class="font-bold">${t.tarif}</td></tr>`).join("");
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finish Good / Gudang — Sistem Manajemen Data UPQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="app-shell" id="app-shell"></div>
+
+<template id="page-template">
+  <div class="grid sm:grid-cols-3 gap-5 mb-6">
+    <div class="kpi-card"><div class="text-xs text-[var(--ink-500)] mb-1">Total Stok Akhir</div><div class="stat-num !text-2xl text-[var(--ink-900)]">8.350 <span class="text-sm font-semibold">eks</span></div></div>
+    <div class="kpi-card"><div class="text-xs text-[var(--ink-500)] mb-1">Item Stok Menipis</div><div class="stat-num !text-2xl text-[var(--warn-text)]">2</div></div>
+    <div class="kpi-card"><div class="text-xs text-[var(--ink-500)] mb-1">Item Stok Habis</div><div class="stat-num !text-2xl text-[var(--danger-text)]">1</div></div>
+  </div>
+
+  <div class="card p-5 md:p-6">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
+      <h3 class="font-bold text-[15px] text-[var(--ink-900)]">Stok Gudang Barang Jadi (Mushaf Al-Qur'an)</h3>
+      <div class="flex gap-3">
+        <div class="input-icon-wrap w-56"><i class="fa-solid fa-magnifying-glass text-sm"></i><input id="search-fg" class="input !py-2 text-sm" placeholder="Cari produk / gudang..."></div>
+        <button onclick="openModal('modal-fg')" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i>Update Stok</button>
+      </div>
+    </div>
+    <div class="table-wrap !border-none">
+      <table class="data-table">
+        <thead><tr><th>No.</th><th>Nama Produk</th><th>Stok Masuk</th><th>Stok Keluar</th><th>Stok Akhir</th><th>Lokasi Gudang</th><th>Update Terakhir</th><th>Status</th></tr></thead>
+        <tbody id="tbl-fg"></tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<div id="modal-fg" class="modal-backdrop hidden">
+  <div class="modal-box">
+    <div class="flex items-center justify-between px-6 py-5 border-b border-[var(--line)]">
+      <h3 class="font-display font-bold text-lg text-[var(--ink-900)]">Update Stok Barang Jadi</h3>
+      <button onclick="closeModal('modal-fg')" class="text-[var(--ink-300)] hover:text-[var(--ink-900)]"><i class="fa-solid fa-xmark text-lg"></i></button>
+    </div>
+    <form class="p-6 space-y-4" onsubmit="event.preventDefault(); closeModal('modal-fg');">
+      <div><label class="field-label">Nama Produk</label><select class="input"><option>Mushaf Al-Qur'an Standar Kemenag (A5)</option><option>Mushaf Al-Qur'an Cover Hardcover (A5)</option><option>Mushaf Al-Qur'an Terjemahan (A4)</option><option>Juz 'Amma Braille</option><option>Mushaf Al-Qur'an Saku (A6)</option></select></div>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div><label class="field-label">Jenis Transaksi</label><select class="input"><option>Stok Masuk (dari WIP)</option><option>Stok Keluar (untuk pengiriman)</option></select></div>
+        <div><label class="field-label">Jumlah</label><input class="input" placeholder="Contoh: 1.000 eks"></div>
+      </div>
+      <div><label class="field-label">Lokasi Gudang</label><input class="input" placeholder="Contoh: Gudang A - Rak 03"></div>
+      <div class="flex justify-end gap-3 pt-2">
+        <button type="button" onclick="closeModal('modal-fg')" class="btn btn-line">Batal</button>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i>Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/data.js"></script>
+<script>
+  renderInternalShell({ active: "finish-good", title: "Finish Good / Gudang", breadcrumb: ["Internal","Proses Produksi","Finish Good"] });
+  document.getElementById("page-content").innerHTML = document.getElementById("page-template").innerHTML;
+
+  const rowTpl = r => `
+    <tr>
+      <td class="font-bold text-[var(--ink-900)]">${r.id}</td>
+      <td>${r.produk}</td>
+      <td class="text-[var(--ok-text)]">+${r.stokMasuk}</td>
+      <td class="text-[var(--danger-text)]">-${r.stokKeluar}</td>
+      <td class="font-bold">${r.stokAkhir}</td>
+      <td>${r.gudang}</td>
+      <td>${r.tglUpdate}</td>
+      <td>${badge(r.status)}</td>
+    </tr>`;
+  renderRows("tbl-fg", DATA_FINISHGOOD, rowTpl);
+  attachSearchFilter("search-fg", () => DATA_FINISHGOOD, "tbl-fg", rowTpl, ["produk","gudang"]);
+</script>
+</body>
+</html>

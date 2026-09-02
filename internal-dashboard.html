@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Sistem Manajemen Data UPQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="app-shell" id="app-shell"></div>
+
+<template id="page-template">
+  <!-- KPI CARDS -->
+  <div class="grid sm:grid-cols-2 xl:grid-cols-5 gap-5 mb-8">
+    <div class="kpi-card">
+      <div class="flex items-center justify-between mb-3"><div class="kpi-icon bg-[var(--brand-50)] text-[var(--brand-600)]"><i class="fa-solid fa-industry"></i></div><span class="badge badge-ok">+8.2%</span></div>
+      <div class="stat-num !text-2xl text-[var(--ink-900)]">15.680</div>
+      <div class="text-xs text-[var(--ink-500)] mt-1">Mushaf Diproduksi Bulan Ini</div>
+    </div>
+    <div class="kpi-card">
+      <div class="flex items-center justify-between mb-3"><div class="kpi-icon bg-[var(--info-bg)] text-[var(--info-text)]"><i class="fa-solid fa-diagram-project"></i></div><span class="badge badge-info">5 Batch</span></div>
+      <div class="stat-num !text-2xl text-[var(--ink-900)]">5</div>
+      <div class="text-xs text-[var(--ink-500)] mt-1">WIP Produksi Aktif</div>
+    </div>
+    <div class="kpi-card">
+      <div class="flex items-center justify-between mb-3"><div class="kpi-icon bg-[var(--warn-bg)] text-[var(--warn-text)]"><i class="fa-solid fa-triangle-exclamation"></i></div><span class="badge badge-warn">Perlu Aksi</span></div>
+      <div class="stat-num !text-2xl text-[var(--ink-900)]">3</div>
+      <div class="text-xs text-[var(--ink-500)] mt-1">Item Stok Kritis / Menipis</div>
+    </div>
+    <div class="kpi-card">
+      <div class="flex items-center justify-between mb-3"><div class="kpi-icon bg-[var(--brand-50)] text-[var(--brand-600)]"><i class="fa-solid fa-truck-fast"></i></div><span class="badge badge-info">2 Aktif</span></div>
+      <div class="stat-num !text-2xl text-[var(--ink-900)]">2</div>
+      <div class="text-xs text-[var(--ink-500)] mt-1">Pengiriman Dalam Proses</div>
+    </div>
+    <div class="kpi-card">
+      <div class="flex items-center justify-between mb-3"><div class="kpi-icon bg-[var(--ok-bg)] text-[var(--ok-text)]"><i class="fa-solid fa-file-invoice-dollar"></i></div><span class="badge badge-ok">+12%</span></div>
+      <div class="stat-num !text-2xl text-[var(--ink-900)]">Rp 591 jt</div>
+      <div class="text-xs text-[var(--ink-500)] mt-1">PNBP Terealisasi Bulan Ini</div>
+    </div>
+  </div>
+
+  <div class="grid xl:grid-cols-3 gap-6 mb-8">
+    <!-- chart -->
+    <div class="xl:col-span-2 card p-6">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-bold text-[15px] text-[var(--ink-900)]">Produksi Mushaf per Bulan (2026)</h3>
+        <select class="input !py-1.5 !text-xs w-32"><option>6 Bulan Terakhir</option><option>Tahun Ini</option></select>
+      </div>
+      <div class="barchart mt-6" id="bar-chart"></div>
+    </div>
+    <!-- alerts -->
+    <div class="card p-6">
+      <h3 class="font-bold text-[15px] text-[var(--ink-900)] mb-4"><i class="fa-solid fa-bell text-[var(--warn-text)] mr-2"></i>Notifikasi &amp; Peringatan</h3>
+      <div class="space-y-3">
+        <div class="flex gap-3 p-3 rounded-xl bg-[var(--warn-bg)]">
+          <i class="fa-solid fa-box-open text-[var(--warn-text)] mt-0.5"></i>
+          <div class="text-xs text-[var(--warn-text)] leading-relaxed"><strong>Stok Menipis:</strong> Mushaf Cover Hardcover tersisa 1.500 eks di gudang.</div>
+        </div>
+        <div class="flex gap-3 p-3 rounded-xl bg-[var(--danger-bg)]">
+          <i class="fa-solid fa-truck-ramp-box text-[var(--danger-text)] mt-0.5"></i>
+          <div class="text-xs text-[var(--danger-text)] leading-relaxed"><strong>Pengiriman Bermasalah:</strong> SPK-88229 — jumlah diterima tidak sesuai (280/300 eks).</div>
+        </div>
+        <div class="flex gap-3 p-3 rounded-xl bg-[var(--warn-bg)]">
+          <i class="fa-solid fa-screwdriver-wrench text-[var(--warn-text)] mt-0.5"></i>
+          <div class="text-xs text-[var(--warn-text)] leading-relaxed"><strong>Maintenance Tertunda:</strong> Mesin Laminating Cover menunggu suku cadang.</div>
+        </div>
+        <div class="flex gap-3 p-3 rounded-xl bg-[var(--info-bg)]">
+          <i class="fa-solid fa-file-invoice text-[var(--info-text)] mt-0.5"></i>
+          <div class="text-xs text-[var(--info-text)] leading-relaxed"><strong>PNBP Menunggu:</strong> 1 permohonan menunggu pembayaran senilai Rp 142,5 jt.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid xl:grid-cols-3 gap-6">
+    <!-- recent activity -->
+    <div class="xl:col-span-2 card p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-bold text-[15px] text-[var(--ink-900)]">Aktivitas Terbaru</h3>
+        <a href="internal-wip-produksi.html" class="text-xs font-bold text-[var(--brand-600)]">Lihat Semua</a>
+      </div>
+      <div class="table-wrap !border-none">
+        <table class="data-table">
+          <thead><tr><th>Aktivitas</th><th>Modul</th><th>Waktu</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Batch Cetak Mushaf Standar #115 dimulai</td><td>WIP Produksi</td><td>Hari ini, 08.20</td><td>{{badgeInfo}}</td></tr>
+            <tr><td>PO-2026-0091 Kertas HVS 60gr diajukan</td><td>Pemesanan Material</td><td>Kemarin, 16.40</td><td>{{badgeInfo}}</td></tr>
+            <tr><td>SPK-88231 diterima &amp; diverifikasi sesuai</td><td>Tracking Pengiriman</td><td>02 Sep, 15.05</td><td>{{badgeOk}}</td></tr>
+            <tr><td>Permohonan PNBP-1156 PT Sinergi Cetak Mandiri</td><td>PNBP</td><td>01 Sep, 11.10</td><td>{{badgeWarn}}</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- shortcuts -->
+    <div class="card p-6">
+      <h3 class="font-bold text-[15px] text-[var(--ink-900)] mb-4">Akses Cepat</h3>
+      <div class="grid grid-cols-2 gap-3">
+        <a href="internal-pemesanan-material.html" class="p-4 rounded-xl border border-[var(--line)] hover:border-[var(--brand-400)] hover:bg-[var(--brand-50)] transition text-center"><i class="fa-solid fa-cart-shopping text-[var(--brand-600)] text-lg mb-2 block"></i><span class="text-xs font-bold">Pemesanan Material</span></a>
+        <a href="internal-wip-produksi.html" class="p-4 rounded-xl border border-[var(--line)] hover:border-[var(--brand-400)] hover:bg-[var(--brand-50)] transition text-center"><i class="fa-solid fa-diagram-project text-[var(--brand-600)] text-lg mb-2 block"></i><span class="text-xs font-bold">WIP Produksi</span></a>
+        <a href="internal-tracking-pengiriman.html" class="p-4 rounded-xl border border-[var(--line)] hover:border-[var(--brand-400)] hover:bg-[var(--brand-50)] transition text-center"><i class="fa-solid fa-truck-fast text-[var(--brand-600)] text-lg mb-2 block"></i><span class="text-xs font-bold">Tracking Kirim</span></a>
+        <a href="internal-pnbp.html" class="p-4 rounded-xl border border-[var(--line)] hover:border-[var(--brand-400)] hover:bg-[var(--brand-50)] transition text-center"><i class="fa-solid fa-file-invoice-dollar text-[var(--brand-600)] text-lg mb-2 block"></i><span class="text-xs font-bold">PNBP</span></a>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/data.js"></script>
+<script>
+  renderInternalShell({ active: "dashboard", title: "Dashboard", breadcrumb: ["Internal","Dashboard"] });
+  let tpl = document.getElementById("page-template").innerHTML
+    .replaceAll("{{badgeInfo}}", badge("Diproses"))
+    .replaceAll("{{badgeOk}}", badge("Sesuai"))
+    .replaceAll("{{badgeWarn}}", badge("Menunggu Pembayaran"));
+  document.getElementById("page-content").innerHTML = tpl;
+
+  const chartData = [
+    {m:"Apr", v:12800}, {m:"Mei", v:14200}, {m:"Jun", v:13650}, {m:"Jul", v:15100}, {m:"Agu", v:14780}, {m:"Sep", v:15680}
+  ];
+  const max = Math.max(...chartData.map(d=>d.v));
+  document.getElementById("bar-chart").innerHTML = chartData.map(d => `
+    <div class="bar" style="height:${Math.round((d.v/max)*100)}%">
+      <span>${(d.v/1000).toFixed(1)}k</span>
+      <em>${d.m}</em>
+    </div>`).join("");
+</script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jadwal Kegiatan &amp; Kunjungan Literasi — UPQ Kemenag RI</title>
+<meta name="description" content="Kalender jadwal kegiatan UPQ dan jadwal kunjungan literasi yang telah terkonfirmasi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<section class="bg-brand-gradient bg-noise-pattern py-14">
+  <div class="container text-white">
+    <div class="text-xs text-white/70 mb-3"><a href="index.html" class="hover:text-white">Beranda</a> <i class="fa-solid fa-chevron-right text-[9px] mx-1"></i> Jadwal Kegiatan</div>
+    <h1 class="font-display font-extrabold text-3xl md:text-4xl">Jadwal Kegiatan &amp; Kunjungan Literasi</h1>
+    <p class="text-white/80 mt-3 max-w-2xl text-sm md:text-base">Pantau agenda kegiatan internal UPQ dan jadwal kunjungan literasi yang telah terkonfirmasi.</p>
+  </div>
+</section>
+
+<section class="container py-12">
+
+  <!-- tabs -->
+  <div class="flex gap-8 border-b border-[var(--line)] mb-8" data-tab-group="jadwal">
+    <button class="tab-btn active" data-tab-btn="kunjungan">Jadwal Kunjungan Literasi</button>
+    <button class="tab-btn" data-tab-btn="upq">Jadwal Kegiatan UPQ</button>
+  </div>
+
+  <!-- mini calendar (statis, September 2026) -->
+  <div class="card p-6 mb-10">
+    <div class="flex items-center justify-between mb-5">
+      <h3 class="font-display font-bold text-lg text-[var(--ink-900)]">September 2026</h3>
+      <div class="flex gap-2">
+        <button class="btn btn-sm btn-ghost px-3"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="btn btn-sm btn-ghost px-3"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </div>
+    <div class="grid grid-cols-7 gap-1 text-center text-[11px] font-bold text-[var(--ink-500)] mb-2">
+      <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
+    </div>
+    <div class="grid grid-cols-7 gap-1" id="calendar-grid"></div>
+    <div class="flex flex-wrap gap-4 mt-5 text-xs text-[var(--ink-500)]">
+      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[var(--brand-600)] inline-block"></span>Kunjungan Literasi</span>
+      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[var(--gold-500)] inline-block"></span>Kegiatan UPQ</span>
+      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[var(--ink-300)] inline-block"></span>Hari ini</span>
+    </div>
+  </div>
+
+  <!-- panel: kunjungan literasi -->
+  <div data-tab-panel="kunjungan" data-tab-group-panel="jadwal" class="active">
+    <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
+      <h3 class="font-bold text-[15px] text-[var(--ink-900)]">Daftar Jadwal Kunjungan Literasi</h3>
+      <a href="pendaftaran-kunjungan.html" class="btn btn-sm btn-primary"><i class="fa-solid fa-calendar-plus"></i>Ajukan Kunjungan</a>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Tanggal</th><th>Instansi / Rombongan</th><th>Jenis Instansi</th><th>Jumlah Peserta</th><th>Status</th></tr></thead>
+        <tbody id="tbl-kunjungan"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- panel: kegiatan upq -->
+  <div data-tab-panel="upq" data-tab-group-panel="jadwal">
+    <h3 class="font-bold text-[15px] text-[var(--ink-900)] mb-4">Daftar Jadwal Kegiatan UPQ</h3>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Tanggal</th><th>Nama Kegiatan</th><th>Lokasi</th><th>Status</th></tr></thead>
+        <tbody id="tbl-upq"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/data.js"></script>
+<script>
+  renderPublicHeader("jadwal");
+  renderPublicFooter();
+  initTabs();
+
+  renderRows("tbl-kunjungan", DATA_JADWAL_KUNJUNGAN, j => `
+    <tr><td class="font-semibold text-[var(--ink-900)]">${j.tgl}</td><td>${j.instansi}</td><td>${j.jenis}</td><td>${j.peserta} orang</td><td>${badge(j.status)}</td></tr>`);
+
+  renderRows("tbl-upq", DATA_JADWAL_UPQ, k => `
+    <tr><td class="font-semibold text-[var(--ink-900)]">${k.tgl}</td><td>${k.kegiatan}</td><td>${k.lokasi}</td><td>${badge(k.status)}</td></tr>`);
+
+  // kalender statis September 2026 (1 Sep 2026 = Selasa)
+  const daysInMonth = 30, startOffset = 2; // 0=Min..6=Sab, 1 Sep 2026 jatuh di Selasa (index 2)
+  const eventDays = { 3:['upq'], 4:['kunjungan'], 5:['upq','kunjungan'], 8:['upq'], 9:['kunjungan'], 11:['kunjungan'], 12:['upq'], 15:['kunjungan'] };
+  const today = 2;
+  let cells = "";
+  for (let i=0;i<startOffset;i++) cells += `<div></div>`;
+  for (let d=1; d<=daysInMonth; d++) {
+    const ev = eventDays[d] || [];
+    const dots = ev.map(e => `<span class="w-1.5 h-1.5 rounded-full inline-block ${e==='kunjungan' ? 'bg-[var(--brand-600)]' : 'bg-[var(--gold-500)]'}"></span>`).join(" ");
+    cells += `<div class="aspect-square rounded-lg flex flex-col items-center justify-center gap-1 text-[13px] ${d===today ? 'bg-[var(--brand-600)] text-white font-bold' : 'hover:bg-[var(--brand-50)] text-[var(--ink-700)]'}">
+      <span>${d}</span><span class="flex gap-0.5">${dots}</span>
+    </div>`;
+  }
+  document.getElementById("calendar-grid").innerHTML = cells;
+</script>
+</body>
+</html>

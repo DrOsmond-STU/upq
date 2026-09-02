@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Internal — Sistem Manajemen Data UPQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-brand-gradient bg-noise-pattern min-h-screen">
+
+<div class="min-h-screen flex items-center justify-center p-6">
+  <div class="w-full max-w-[920px] grid md:grid-cols-2 rounded-3xl overflow-hidden shadow-2xl">
+
+    <!-- left brand panel -->
+    <div class="hidden md:flex flex-col justify-between p-10 text-white" style="background:linear-gradient(160deg,var(--navy-900),var(--brand-800))">
+      <div>
+        <div class="flex items-center gap-3 mb-10">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center bg-white/10"><i class="fa-solid fa-book-quran text-lg"></i></div>
+          <span class="font-display font-bold text-[15px]">UPQ Internal</span>
+        </div>
+        <h2 class="font-display font-extrabold text-2xl leading-snug">Sistem Manajemen Data<br>Unit Percetakan Al-Qur'an</h2>
+        <p class="text-white/70 text-sm mt-4 leading-relaxed">Kelola proses produksi, tracking pengiriman Mushaf, dan layanan PNBP dalam satu platform terintegrasi.</p>
+      </div>
+      <ul class="space-y-3 text-sm text-white/80">
+        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-[var(--gold-300)]"></i>Manajemen produksi end-to-end</li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-[var(--gold-300)]"></i>Tracking pengiriman real-time</li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-[var(--gold-300)]"></i>Pelaporan PNBP terverifikasi</li>
+      </ul>
+    </div>
+
+    <!-- right form -->
+    <div class="bg-white p-8 md:p-10 flex flex-col justify-center">
+      <div class="mb-8">
+        <h1 class="font-display font-extrabold text-2xl text-[var(--ink-900)]">Masuk ke Akun Internal</h1>
+        <p class="text-sm text-[var(--ink-500)] mt-1.5">Khusus pegawai &amp; petugas UPQ yang berwenang.</p>
+      </div>
+      <form id="login-form" class="space-y-5">
+        <div>
+          <label class="field-label">Username / NIP</label>
+          <div class="input-icon-wrap"><i class="fa-solid fa-user"></i><input class="input" placeholder="Masukkan username atau NIP" value="admin.produksi"></div>
+        </div>
+        <div>
+          <label class="field-label">Kata Sandi</label>
+          <div class="input-icon-wrap"><i class="fa-solid fa-lock"></i><input type="password" class="input" placeholder="Masukkan kata sandi" value="••••••••"></div>
+        </div>
+        <div>
+          <label class="field-label">Login Sebagai (Peran) — demo purwarupa</label>
+          <select class="input">
+            <option>Admin Produksi</option>
+            <option>Admin Tracking Pengiriman</option>
+            <option>Admin PNBP</option>
+            <option>Kepala UPQ (Approval)</option>
+          </select>
+        </div>
+        <div class="flex items-center justify-between text-sm">
+          <label class="flex items-center gap-2 text-[var(--ink-500)]"><input type="checkbox" checked> Ingat saya</label>
+          <a href="#" class="font-semibold text-[var(--brand-600)]">Lupa kata sandi?</a>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit"><i class="fa-solid fa-right-to-bracket"></i>Masuk</button>
+      </form>
+      <div class="text-center text-xs text-[var(--ink-500)] mt-6">
+        <i class="fa-solid fa-shield-halved mr-1"></i>Purwarupa UI/UX — proses login bersifat simulasi.
+      </div>
+      <a href="index.html" class="text-center text-sm font-semibold text-[var(--brand-600)] mt-4 block"><i class="fa-solid fa-arrow-left mr-1.5"></i>Kembali ke Website Publik</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById("login-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    window.location.href = "internal-dashboard.html";
+  });
+</script>
+</body>
+</html>

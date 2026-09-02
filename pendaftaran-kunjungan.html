@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pendaftaran Kunjungan Literasi — UPQ Kemenag RI</title>
+<meta name="description" content="Formulir pendaftaran kunjungan literasi ke Unit Percetakan Al-Qur'an Kementerian Agama RI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div id="site-header"></div>
+
+<section class="bg-brand-gradient bg-noise-pattern py-14">
+  <div class="container text-white">
+    <div class="text-xs text-white/70 mb-3"><a href="index.html" class="hover:text-white">Beranda</a> <i class="fa-solid fa-chevron-right text-[9px] mx-1"></i> Daftar Kunjungan</div>
+    <h1 class="font-display font-extrabold text-3xl md:text-4xl">Pendaftaran Kunjungan Literasi</h1>
+    <p class="text-white/80 mt-3 max-w-2xl text-sm md:text-base">Lengkapi formulir berikut untuk mengajukan kunjungan rombongan Anda ke UPQ.</p>
+  </div>
+</section>
+
+<section class="container py-12 grid lg:grid-cols-3 gap-10">
+  <div class="lg:col-span-2">
+
+    <!-- stepper -->
+    <div class="stepper mb-10">
+      <div class="step active" id="step-ind-1"><div class="step-circle">1</div><div class="step-label hidden sm:block">Data Instansi</div></div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step" id="step-ind-2"><div class="step-circle">2</div><div class="step-label hidden sm:block">Rombongan &amp; Jadwal</div></div>
+      <div class="step-line" id="line-2"></div>
+      <div class="step" id="step-ind-3"><div class="step-circle">3</div><div class="step-label hidden sm:block">Konfirmasi</div></div>
+    </div>
+
+    <form id="form-daftar" class="card p-6 md:p-8">
+
+      <!-- STEP 1 -->
+      <div class="form-step" data-step="1">
+        <h2 class="font-display font-bold text-lg text-[var(--ink-900)] mb-6">1. Data Instansi</h2>
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div class="sm:col-span-2">
+            <label class="field-label">Nama Instansi / Sekolah <span class="text-[var(--danger-text)]">*</span></label>
+            <input required class="input" placeholder="Contoh: SMA Negeri 1 Ciawi">
+          </div>
+          <div>
+            <label class="field-label">Jenis Instansi <span class="text-[var(--danger-text)]">*</span></label>
+            <select required class="input">
+              <option value="">Pilih jenis instansi</option>
+              <option>Sekolah</option><option>Pesantren</option><option>Perguruan Tinggi</option>
+              <option>Instansi Pemerintah</option><option>Komunitas / Organisasi</option><option>Lainnya</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label">Nama Penanggung Jawab (PIC) <span class="text-[var(--danger-text)]">*</span></label>
+            <input required class="input" placeholder="Nama lengkap PIC">
+          </div>
+          <div>
+            <label class="field-label">No. HP / WhatsApp <span class="text-[var(--danger-text)]">*</span></label>
+            <input required class="input" placeholder="08xxxxxxxxxx">
+          </div>
+          <div>
+            <label class="field-label">Email <span class="text-[var(--danger-text)]">*</span></label>
+            <input required type="email" class="input" placeholder="nama@instansi.go.id">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="field-label">Alamat Instansi</label>
+            <textarea class="input" rows="3" placeholder="Alamat lengkap instansi"></textarea>
+          </div>
+        </div>
+        <div class="flex justify-end mt-8">
+          <button type="button" onclick="goStep(2)" class="btn btn-primary">Lanjutkan <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="form-step hidden" data-step="2">
+        <h2 class="font-display font-bold text-lg text-[var(--ink-900)] mb-6">2. Data Rombongan &amp; Jadwal</h2>
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div>
+            <label class="field-label">Jumlah Peserta <span class="text-[var(--danger-text)]">*</span></label>
+            <input required type="number" min="10" max="80" class="input" placeholder="10 – 80 orang">
+          </div>
+          <div>
+            <label class="field-label">Jumlah Pendamping</label>
+            <input type="number" min="0" class="input" placeholder="Jumlah guru/pendamping">
+          </div>
+          <div>
+            <label class="field-label">Tanggal Kunjungan yang Diajukan <span class="text-[var(--danger-text)]">*</span></label>
+            <input required type="date" class="input">
+          </div>
+          <div>
+            <label class="field-label">Sesi Waktu</label>
+            <select class="input"><option>09.00 – 11.00 WIB</option><option>13.00 – 15.00 WIB</option></select>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="field-label">Tujuan / Fokus Kunjungan</label>
+            <textarea class="input" rows="3" placeholder="Contoh: Edukasi proses percetakan Mushaf untuk siswa kelas XI"></textarea>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="field-label">Upload Surat Permohonan Resmi <span class="text-[var(--danger-text)]">*</span></label>
+            <div class="border-2 border-dashed border-[var(--line)] rounded-xl p-6 text-center text-sm text-[var(--ink-500)] hover:border-[var(--brand-400)] transition cursor-pointer">
+              <i class="fa-solid fa-cloud-arrow-up text-2xl text-[var(--brand-500)] mb-2 block"></i>
+              Klik atau seret file ke sini (PDF, maks. 5MB)
+              <input type="file" class="hidden">
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between mt-8">
+          <button type="button" onclick="goStep(1)" class="btn btn-line"><i class="fa-solid fa-arrow-left"></i> Kembali</button>
+          <button type="button" onclick="goStep(3)" class="btn btn-primary">Lanjutkan <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="form-step hidden" data-step="3">
+        <h2 class="font-display font-bold text-lg text-[var(--ink-900)] mb-6">3. Konfirmasi Pendaftaran</h2>
+        <div class="rounded-xl bg-[var(--brand-50)] p-5 text-sm text-[var(--ink-700)] leading-relaxed mb-6">
+          <i class="fa-solid fa-circle-info text-[var(--brand-600)] mr-1.5"></i>
+          Mohon periksa kembali data Anda. Setelah dikirim, tim panitia akan memverifikasi pendaftaran dalam <strong>2×24 jam kerja</strong> dan mengirimkan konfirmasi melalui email/WhatsApp yang terdaftar.
+        </div>
+        <label class="flex items-start gap-3 text-sm text-[var(--ink-700)] mb-6">
+          <input required type="checkbox" class="mt-1">
+          <span>Saya menyatakan bahwa data yang diisi benar dan bersedia mengikuti seluruh ketentuan kunjungan literasi UPQ.</span>
+        </label>
+        <div class="flex justify-between">
+          <button type="button" onclick="goStep(2)" class="btn btn-line"><i class="fa-solid fa-arrow-left"></i> Kembali</button>
+          <button type="submit" class="btn btn-gold"><i class="fa-solid fa-paper-plane"></i>Kirim Pendaftaran</button>
+        </div>
+      </div>
+
+      <!-- SUCCESS -->
+      <div class="form-step hidden text-center py-8" data-step="success">
+        <div class="w-16 h-16 rounded-full bg-[var(--ok-bg)] text-[var(--ok-text)] flex items-center justify-center text-3xl mx-auto mb-5"><i class="fa-solid fa-check"></i></div>
+        <h2 class="font-display font-bold text-xl text-[var(--ink-900)]">Pendaftaran Berhasil Dikirim!</h2>
+        <p class="text-sm text-[var(--ink-500)] mt-3 max-w-md mx-auto">Nomor pendaftaran Anda: <strong class="text-[var(--ink-900)]">KL-2026-0913</strong>. Tim panitia akan menghubungi Anda setelah proses verifikasi selesai.</p>
+        <a href="jadwal-kegiatan.html" class="btn btn-primary mt-6"><i class="fa-solid fa-calendar-days"></i>Lihat Jadwal Kunjungan</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="space-y-6">
+    <div class="card p-6">
+      <h3 class="font-bold text-[15px] text-[var(--ink-900)] mb-4"><i class="fa-solid fa-list-check text-[var(--brand-600)] mr-2"></i>Syarat Pendaftaran</h3>
+      <ul class="space-y-3 text-sm text-[var(--ink-500)]">
+        <li class="flex gap-2"><i class="fa-solid fa-circle-check text-[var(--brand-500)] mt-0.5"></i>Surat permohonan resmi (format PDF)</li>
+        <li class="flex gap-2"><i class="fa-solid fa-circle-check text-[var(--brand-500)] mt-0.5"></i>Minimal 10, maksimal 80 peserta</li>
+        <li class="flex gap-2"><i class="fa-solid fa-circle-check text-[var(--brand-500)] mt-0.5"></i>Pendaftaran H-7 sebelum kunjungan</li>
+        <li class="flex gap-2"><i class="fa-solid fa-circle-check text-[var(--brand-500)] mt-0.5"></i>Menyertakan data PIC yang dapat dihubungi</li>
+      </ul>
+    </div>
+    <div class="card p-6 !bg-[var(--brand-50)] !border-[var(--brand-100)]">
+      <h3 class="font-bold text-[15px] text-[var(--ink-900)] mb-2"><i class="fa-solid fa-headset text-[var(--brand-600)] mr-2"></i>Kontak Panitia</h3>
+      <div class="text-sm space-y-1.5 text-[var(--ink-700)]">
+        <div class="font-semibold"><i class="fa-solid fa-phone mr-2 text-[var(--brand-600)]"></i>(0251) 8240 123</div>
+        <div class="font-semibold"><i class="fa-solid fa-envelope mr-2 text-[var(--brand-600)]"></i>literasi@upq.kemenag.go.id</div>
+      </div>
+    </div>
+  </aside>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/data.js"></script>
+<script>
+  renderPublicHeader("kunjungan");
+  renderPublicFooter();
+
+  function goStep(n){
+    document.querySelectorAll(".form-step").forEach(s => s.classList.add("hidden"));
+    document.querySelector(`.form-step[data-step="${n}"]`).classList.remove("hidden");
+    [1,2,3].forEach(i => {
+      const ind = document.getElementById(`step-ind-${i}`);
+      ind.classList.remove("active","done");
+      if (i < n) ind.classList.add("done");
+      if (i === n) ind.classList.add("active");
+    });
+    const l1 = document.getElementById("line-1"), l2 = document.getElementById("line-2");
+    l1.classList.toggle("done", n > 1);
+    l2.classList.toggle("done", n > 2);
+    window.scrollTo({top: document.getElementById("form-daftar").offsetTop - 100, behavior:"smooth"});
+  }
+
+  document.getElementById("form-daftar").addEventListener("submit", (e) => {
+    e.preventDefault();
+    document.querySelectorAll(".form-step").forEach(s => s.classList.add("hidden"));
+    document.querySelector('.form-step[data-step="success"]').classList.remove("hidden");
+    [1,2,3].forEach(i => document.getElementById(`step-ind-${i}`).classList.add("done"));
+    document.getElementById("line-1").classList.add("done");
+    document.getElementById("line-2").classList.add("done");
+  });
+</script>
+</body>
+</html>

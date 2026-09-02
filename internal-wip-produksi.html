@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WIP Produksi — Sistem Manajemen Data UPQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="app-shell" id="app-shell"></div>
+
+<template id="page-template">
+  <div class="rounded-xl bg-[var(--brand-50)] p-4 text-sm text-[var(--brand-800)] mb-6 flex gap-3">
+    <i class="fa-solid fa-circle-info mt-0.5"></i>
+    <span>Work in Progress (WIP) menampilkan setiap batch produk yang sedang berjalan beserta tahapan produksinya — mulai dari pra-cetak hingga finishing &amp; packing sebelum masuk ke Finish Good.</span>
+  </div>
+
+  <div class="grid gap-5" id="wip-cards"></div>
+
+  <div class="card p-5 md:p-6 mt-6">
+    <h3 class="font-bold text-[15px] text-[var(--ink-900)] mb-4">Tahapan Alur Produksi</h3>
+    <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
+      <span class="px-3 py-2 rounded-full bg-[var(--brand-600)] text-white">Pra-Cetak</span>
+      <i class="fa-solid fa-arrow-right text-[var(--ink-300)]"></i>
+      <span class="px-3 py-2 rounded-full bg-[var(--brand-600)] text-white">Percetakan Isi</span>
+      <i class="fa-solid fa-arrow-right text-[var(--ink-300)]"></i>
+      <span class="px-3 py-2 rounded-full bg-[var(--brand-600)] text-white">Penjilidan</span>
+      <i class="fa-solid fa-arrow-right text-[var(--ink-300)]"></i>
+      <span class="px-3 py-2 rounded-full bg-[var(--brand-600)] text-white">Quality Control</span>
+      <i class="fa-solid fa-arrow-right text-[var(--ink-300)]"></i>
+      <span class="px-3 py-2 rounded-full bg-[var(--brand-600)] text-white">Finishing &amp; Packing</span>
+      <i class="fa-solid fa-arrow-right text-[var(--ink-300)]"></i>
+      <span class="px-3 py-2 rounded-full bg-[var(--gold-500)] text-[#20180a]">Finish Good</span>
+    </div>
+  </div>
+</template>
+
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/data.js"></script>
+<script>
+  renderInternalShell({ active: "wip-produksi", title: "WIP Produksi", breadcrumb: ["Internal","Proses Produksi","WIP Produksi"] });
+  document.getElementById("page-content").innerHTML = document.getElementById("page-template").innerHTML;
+
+  document.getElementById("wip-cards").innerHTML = DATA_WIP.map(w => `
+    <div class="card p-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+        <div>
+          <div class="text-xs text-[var(--ink-500)] font-semibold mb-0.5">${w.id}</div>
+          <div class="font-bold text-[15px] text-[var(--ink-900)]">${w.produk}</div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="badge badge-info">${w.tahap}</span>
+          <span class="text-xs text-[var(--ink-500)]"><i class="fa-regular fa-clock mr-1"></i>Estimasi selesai ${w.eta}</span>
+        </div>
+      </div>
+      <div class="flex items-center justify-between text-xs text-[var(--ink-500)] mb-1.5">
+        <span>Target: <strong class="text-[var(--ink-900)]">${w.target}</strong> · Capaian: <strong class="text-[var(--ink-900)]">${w.capaian}</strong> · PIC: ${w.pic}</span>
+        <span class="font-bold text-[var(--brand-700)]">${w.progress}%</span>
+      </div>
+      <div class="w-full h-2.5 rounded-full bg-[var(--neutral-bg)] overflow-hidden">
+        <div class="h-full rounded-full" style="width:${w.progress}%;background:linear-gradient(90deg,var(--brand-400),var(--brand-600))"></div>
+      </div>
+    </div>`).join("");
+</script>
+</body>
+</html>
