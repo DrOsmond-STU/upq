@@ -34,10 +34,31 @@ grid kartu layanan, mega footer) dengan palet identitas Kemenag/Al-Qur'an
 ## Struktur Aset
 ```
 assets/
-  css/style.css   — Design system (variabel warna, komponen, layout internal)
-  js/layout.js    — Header/footer publik + shell sidebar internal (JS-injected, dipakai di semua halaman)
-  js/data.js      — Data contoh (dummy) + helper render tabel/badge/filter
+  css/style.css         — Design system (variabel warna, komponen, layout internal)
+  css/tailwind.min.css  — Utility CSS (Tailwind) hasil build lokal, di-host sendiri (bukan CDN)
+  vendor/fontawesome/   — Font Awesome (ikon) di-host sendiri (bukan CDN)
+  js/layout.js          — Header/footer publik + shell sidebar internal (JS-injected, dipakai di semua halaman)
+  js/data.js            — Data contoh (dummy) + helper render tabel/badge/filter
 ```
+
+> **Catatan penting:** Seluruh dependency front-end (utility CSS Tailwind & ikon
+> Font Awesome) sengaja **di-host sendiri** (bukan memanggil CDN publik saat
+> runtime) — praktik yang lebih tepat untuk situs produksi instansi
+> pemerintah: tidak bergantung pada ketersediaan/kebijakan CDN pihak ketiga,
+> lebih cepat dimuat, dan tetap berfungsi walau akses ke domain CDN diblokir
+> oleh kebijakan jaringan (mis. proxy/firewall instansi). Satu-satunya
+> panggilan eksternal yang tersisa adalah Google Fonts (opsional — jika gagal
+> dimuat, tipografi otomatis jatuh ke system font tanpa merusak tampilan).
+
+### Menambah / mengubah class Tailwind
+Karena `tailwind.min.css` adalah hasil build (bukan CDN dinamis), setiap kali
+menambah class Tailwind baru di HTML/JS, file itu perlu di-build ulang:
+```bash
+npm install -D tailwindcss@3
+npx tailwindcss -i ./input.css -o assets/css/tailwind.min.css --minify \
+  --content "./*.html,./assets/js/*.js"
+```
+(`input.css` cukup berisi `@tailwind base; @tailwind components; @tailwind utilities;`)
 
 ## Menjalankan Secara Lokal
 Situs statis murni — cukup buka `index.html` langsung di browser, atau jalankan

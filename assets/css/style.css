@@ -73,7 +73,16 @@ a{color:inherit;text-decoration:none}
 .bg-brand-gradient{
   background:linear-gradient(120deg,var(--brand-900) 0%,var(--brand-700) 45%,var(--brand-500) 100%);
 }
-.bg-noise-pattern{
+/* Catatan: pola noise memakai ::before terpisah (bukan background-image langsung),
+   supaya tidak menimpa background gradasi saat dipakai bersama .bg-brand-gradient
+   pada elemen yang sama. */
+.bg-noise-pattern{position:relative;isolation:isolate}
+.bg-noise-pattern::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
   background-image:
     radial-gradient(circle at 12% 20%, rgba(255,255,255,.08) 0, transparent 40%),
     radial-gradient(circle at 85% 75%, rgba(201,162,39,.18) 0, transparent 45%);
@@ -214,6 +223,9 @@ table.data-table tbody tr:hover{background:var(--brand-50)}
 
 /* modal */
 .modal-backdrop{position:fixed;inset:0;background:rgba(10,20,17,.55);backdrop-filter:blur(2px);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px;overflow-y:auto}
+/* Spesifisitas lebih tinggi dari .modal-backdrop agar util .hidden (dimuat lebih dulu
+   dari file Tailwind) selalu menang saat modal disembunyikan, apa pun urutan <link>. */
+.modal-backdrop.hidden{display:none}
 .modal-box{background:#fff;border-radius:16px;width:100%;max-width:640px;box-shadow:var(--shadow-lg);animation:pop .16s ease}
 @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
 
