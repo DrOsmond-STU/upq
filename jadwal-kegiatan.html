@@ -59,7 +59,7 @@
     </div>
     <div class="table-wrap">
       <table class="data-table">
-        <thead><tr><th>Tanggal</th><th>Instansi / Rombongan</th><th>Jenis Instansi</th><th>Jumlah Peserta</th><th>Status</th></tr></thead>
+        <thead><tr><th>Tanggal</th><th>Instansi / Rombongan</th><th>Jenis Instansi</th><th>Jumlah Peserta</th><th>Status</th><th></th></tr></thead>
         <tbody id="tbl-kunjungan"></tbody>
       </table>
     </div>
@@ -70,12 +70,22 @@
     <h3 class="font-bold text-[15px] text-[var(--ink-900)] mb-4">Daftar Jadwal Kegiatan UPQ</h3>
     <div class="table-wrap">
       <table class="data-table">
-        <thead><tr><th>Tanggal</th><th>Nama Kegiatan</th><th>Lokasi</th><th>Status</th></tr></thead>
+        <thead><tr><th>Tanggal</th><th>Nama Kegiatan</th><th>Lokasi</th><th>Status</th><th></th></tr></thead>
         <tbody id="tbl-upq"></tbody>
       </table>
     </div>
   </div>
 </section>
+
+<!-- MODAL: agenda 1 tanggal (dari klik sel kalender) -->
+<div id="modal-day-agenda" class="modal-backdrop hidden">
+  <div class="modal-box" id="day-agenda-content"></div>
+</div>
+
+<!-- MODAL: detail 1 item agenda (dari klik baris tabel) -->
+<div id="modal-agenda-item" class="modal-backdrop hidden">
+  <div class="modal-box" id="agenda-item-content"></div>
+</div>
 
 <div id="site-footer"></div>
 
@@ -86,26 +96,81 @@
   renderPublicFooter();
   initTabs();
 
-  renderRows("tbl-kunjungan", DATA_JADWAL_KUNJUNGAN, j => `
-    <tr><td class="font-semibold text-[var(--ink-900)]">${j.tgl}</td><td>${j.instansi}</td><td>${j.jenis}</td><td>${j.peserta} orang</td><td>${badge(j.status)}</td></tr>`);
+  // Agenda gabungan (kunjungan literasi + kegiatan UPQ), dipakai untuk tabel & kalender.
+  const AGENDA = combinedAgenda();
+  const agendaKunjungan = AGENDA.filter(a => a.tipe === "kunjungan");
+  const agendaUpq = AGENDA.filter(a => a.tipe === "upq");
 
-  renderRows("tbl-upq", DATA_JADWAL_UPQ, k => `
-    <tr><td class="font-semibold text-[var(--ink-900)]">${k.tgl}</td><td>${k.kegiatan}</td><td>${k.lokasi}</td><td>${badge(k.status)}</td></tr>`);
+  renderRows("tbl-kunjungan", agendaKunjungan, (a, i) => `
+    <tr class="cursor-pointer" onclick="showItemDetail('kunjungan', ${i})">
+      <td class="font-semibold text-[var(--ink-900)]">${a.tgl}</td>
+      <td>${a.judul}</td>
+      <td>${a.detail["Jenis Instansi"]}</td>
+      <td>${a.detail["Jumlah Peserta"]}</td>
+      <td>${badge(a.status)}</td>
+      <td><button class="text-[var(--brand-600)] font-bold text-xs">Detail <i class="fa-solid fa-chevron-right text-[10px]"></i></button></td>
+    </tr>`);
 
-  // kalender statis September 2026 (1 Sep 2026 = Selasa)
-  const daysInMonth = 30, startOffset = 2; // 0=Min..6=Sab, 1 Sep 2026 jatuh di Selasa (index 2)
-  const eventDays = { 3:['upq'], 4:['kunjungan'], 5:['upq','kunjungan'], 8:['upq'], 9:['kunjungan'], 11:['kunjungan'], 12:['upq'], 15:['kunjungan'] };
-  const today = 2;
+  renderRows("tbl-upq", agendaUpq, (a, i) => `
+    <tr class="cursor-pointer" onclick="showItemDetail('upq', ${i})">
+      <td class="font-semibold text-[var(--ink-900)]">${a.tgl}</td>
+      <td>${a.judul}</td>
+      <td>${a.detail["Lokasi"]}</td>
+      <td>${badge(a.status)}</td>
+      <td><button class="text-[var(--brand-600)] font-bold text-xs">Detail <i class="fa-solid fa-chevron-right text-[10px]"></i></button></td>
+    </tr>`);
+
+  function showItemDetail(tipe, i) {
+    const item = (tipe === "kunjungan" ? agendaKunjungan : agendaUpq)[i];
+    showAgendaDetailModal(item, "modal-agenda-item", "agenda-item-content");
+  }
+
+  // --- Kalender September 2026 (1 Sep 2026 = Selasa), tanggal diambil dari AGENDA ---
+  const CAL_YEAR = 2026, CAL_MONTH = 8; // 0-indexed: 8 = September
+  const daysInMonth = 30, startOffset = 2; // 0=Min..6=Sab
+  const today = 2; // "hari ini" di data purwarupa: 2 September 2026
+
+  const eventsByDay = {};
+  AGENDA.forEach(a => {
+    if (a.dateObj.getFullYear() === CAL_YEAR && a.dateObj.getMonth() === CAL_MONTH) {
+      const d = a.dateObj.getDate();
+      (eventsByDay[d] ||= []).push(a);
+    }
+  });
+
   let cells = "";
-  for (let i=0;i<startOffset;i++) cells += `<div></div>`;
-  for (let d=1; d<=daysInMonth; d++) {
-    const ev = eventDays[d] || [];
-    const dots = ev.map(e => `<span class="w-1.5 h-1.5 rounded-full inline-block ${e==='kunjungan' ? 'bg-[var(--brand-600)]' : 'bg-[var(--gold-500)]'}"></span>`).join(" ");
-    cells += `<div class="aspect-square rounded-lg flex flex-col items-center justify-center gap-1 text-[13px] ${d===today ? 'bg-[var(--brand-600)] text-white font-bold' : 'hover:bg-[var(--brand-50)] text-[var(--ink-700)]'}">
-      <span>${d}</span><span class="flex gap-0.5">${dots}</span>
+  for (let i = 0; i < startOffset; i++) cells += `<div></div>`;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const evs = eventsByDay[d] || [];
+    const dots = evs.map(e => `<span class="w-1.5 h-1.5 rounded-full inline-block ${e.tipe === 'kunjungan' ? 'bg-[var(--brand-600)]' : 'bg-[var(--gold-500)]'}"></span>`).join(" ");
+    const clickable = evs.length > 0;
+    cells += `<div ${clickable ? `onclick="showDayAgenda(${d})" role="button" tabindex="0"` : ""}
+        class="aspect-square rounded-lg flex flex-col items-center justify-center gap-1 text-[13px] transition
+          ${d === today ? 'bg-[var(--brand-600)] text-white font-bold' : clickable ? 'text-[var(--ink-700)] cursor-pointer hover:bg-[var(--brand-50)] hover:ring-1 hover:ring-[var(--brand-300)]' : 'text-[var(--ink-700)]'}">
+      <span>${d}</span><span class="flex gap-0.5 min-h-[6px]">${dots}</span>
     </div>`;
   }
   document.getElementById("calendar-grid").innerHTML = cells;
+
+  function showDayAgenda(day) {
+    const items = eventsByDay[day] || [];
+    if (!items.length) return;
+    const dateLabel = new Date(CAL_YEAR, CAL_MONTH, day).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+    document.getElementById("day-agenda-content").innerHTML = `
+      <div class="flex items-center justify-between px-6 py-5 border-b border-[var(--line)]">
+        <h3 class="font-display font-bold text-lg text-[var(--ink-900)]"><i class="fa-solid fa-calendar-day text-[var(--brand-600)] mr-2"></i>Agenda ${dateLabel}</h3>
+        <button onclick="closeModal('modal-day-agenda')" class="text-[var(--ink-300)] hover:text-[var(--ink-900)]"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div class="p-6 space-y-3">
+        ${items.map(it => `
+          <div class="p-4 rounded-xl border border-[var(--line)] hover:border-[var(--brand-300)] transition">
+            <div class="flex items-center justify-between gap-3 mb-2 flex-wrap">${agendaTypeBadge(it.tipe)}${badge(it.status)}</div>
+            <div class="font-bold text-sm text-[var(--ink-900)]">${it.judul}</div>
+            <div class="text-xs text-[var(--ink-500)] mt-1">${it.sub}</div>
+          </div>`).join("")}
+      </div>`;
+    openModal("modal-day-agenda");
+  }
 </script>
 </body>
 </html>

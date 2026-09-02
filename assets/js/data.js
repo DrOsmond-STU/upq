@@ -153,6 +153,58 @@ const DATA_JADWAL_KUNJUNGAN = [
   { tgl: "18 Agu 2026", instansi: "Komunitas Rumah Qur'an Depok", jenis: "Komunitas", peserta: 20, status: "Dibatalkan" },
 ];
 
+/* ---------- Helper: agenda gabungan (kunjungan literasi + kegiatan UPQ) ----------
+   Dipakai di beranda & halaman Jadwal Kegiatan supaya kedua jenis agenda selalu
+   tampil bersama (kalender, daftar, dialog detail saat tanggal/baris diklik). */
+const BULAN_ID = { Jan:0, Feb:1, Mar:2, Apr:3, Mei:4, Jun:5, Jul:6, Agu:7, Sep:8, Okt:9, Nov:10, Des:11 };
+function parseTglID(str) {
+  const [d, mon, y] = str.split(" ");
+  return new Date(parseInt(y, 10), BULAN_ID[mon] ?? 0, parseInt(d, 10));
+}
+function combinedAgenda() {
+  const kunjungan = DATA_JADWAL_KUNJUNGAN.map(j => ({
+    tipe: "kunjungan", tgl: j.tgl, dateObj: parseTglID(j.tgl),
+    judul: j.instansi, sub: `${j.jenis} · ${j.peserta} orang`, status: j.status,
+    detail: { "Jenis Instansi": j.jenis, "Jumlah Peserta": `${j.peserta} orang` },
+  }));
+  const upq = DATA_JADWAL_UPQ.map(k => ({
+    tipe: "upq", tgl: k.tgl, dateObj: parseTglID(k.tgl),
+    judul: k.kegiatan, sub: k.lokasi, status: k.status,
+    detail: { "Lokasi": k.lokasi },
+  }));
+  return [...kunjungan, ...upq].sort((a, b) => a.dateObj - b.dateObj);
+}
+function agendaTypeBadge(tipe) {
+  return tipe === "upq"
+    ? `<span class="badge" style="background:#fdf3e0;color:#8a5a00"><span style="width:6px;height:6px;border-radius:50%;background:var(--gold-500);display:inline-block;margin-right:2px"></span>Kegiatan UPQ</span>`
+    : `<span class="badge" style="background:var(--brand-50);color:var(--brand-700)"><span style="width:6px;height:6px;border-radius:50%;background:var(--brand-600);display:inline-block;margin-right:2px"></span>Kunjungan Literasi</span>`;
+}
+/* Render 1 item agenda ke dalam modal (dipakai baik dari baris tabel maupun tanggal kalender) */
+function showAgendaDetailModal(item, modalId, contentId) {
+  if (!item) return;
+  const detailRows = Object.entries(item.detail || {}).map(([k, v]) => `
+    <div class="flex justify-between py-1.5 border-b border-[var(--line)] last:border-none">
+      <span class="text-[var(--ink-500)]">${k}</span><span class="font-semibold text-[var(--ink-900)]">${v}</span>
+    </div>`).join("");
+  document.getElementById(contentId).innerHTML = `
+    <div class="flex items-center justify-between px-6 py-5 border-b border-[var(--line)]">
+      <div>
+        <div class="text-xs text-[var(--ink-500)] font-semibold mb-1">${item.tgl}</div>
+        ${agendaTypeBadge(item.tipe)}
+      </div>
+      <button onclick="closeModal('${modalId}')" class="text-[var(--ink-300)] hover:text-[var(--ink-900)]"><i class="fa-solid fa-xmark text-lg"></i></button>
+    </div>
+    <div class="p-6">
+      <h3 class="font-display font-bold text-lg text-[var(--ink-900)] mb-1">${item.judul}</h3>
+      <p class="text-sm text-[var(--ink-500)] mb-4">${item.sub}</p>
+      <div class="text-sm mb-4">${detailRows}</div>
+      <div class="flex justify-between items-center">
+        <span class="text-sm text-[var(--ink-500)]">Status</span>${badge(item.status)}
+      </div>
+    </div>`;
+  openModal(modalId);
+}
+
 /* ---------- 9. Dokumentasi Kegiatan (galeri) ---------- */
 const DATA_DOKUMENTASI = [
   { judul: "Kunjungan Literasi SMA Negeri 3 Bogor", kategori: "Kunjungan Literasi", tgl: "18 Agu 2026" },
@@ -165,6 +217,30 @@ const DATA_DOKUMENTASI = [
   { judul: "Serah Terima Mushaf ke Kanwil Jawa Barat", kategori: "Seremonial", tgl: "25 Jul 2026" },
   { judul: "Pelatihan Penjilidan untuk Staf Baru", kategori: "Pelatihan", tgl: "20 Jul 2026" },
 ];
+
+/* ---------- Helper: ilustrasi "foto kegiatan" (belum ada aset foto asli) ----------
+   Dipakai di dalam kartu ber-class .photo-ph — menghasilkan lencana ikon besar
+   di tengah + 1-2 ikon aksen samar di sudut, supaya kartu terasa hidup seperti
+   foto dokumentasi, bukan sekadar blok warna polos. */
+const KATEGORI_ICON = {
+  "Produksi": { icon: "fa-industry", accents: ["fa-gear", "fa-boxes-stacked"] },
+  "Kunjungan Literasi": { icon: "fa-people-group", accents: ["fa-book-open-reader", "fa-comments"] },
+  "Pelatihan": { icon: "fa-chalkboard-user", accents: ["fa-graduation-cap", "fa-lightbulb"] },
+  "Seremonial": { icon: "fa-flag", accents: ["fa-handshake", "fa-award"] },
+};
+function photoIllustration(icon, accents = [], caption = "") {
+  const accentPos = [
+    "top:12%;left:10%;font-size:32px;transform:rotate(-14deg)",
+    "bottom:14%;right:12%;font-size:28px;transform:rotate(11deg)",
+  ];
+  const accentHtml = accents.slice(0, 2).map((a, i) => `<i class="fa-solid ${a} photo-ph-accent" style="${accentPos[i]}"></i>`).join("");
+  const captionHtml = caption ? `<div class="photo-ph-caption">${caption}</div>` : "";
+  return `${accentHtml}<div class="photo-ph-badge"><i class="fa-solid ${icon}"></i></div>${captionHtml}`;
+}
+function photoIllustrationForKategori(kategori, caption = "") {
+  const k = KATEGORI_ICON[kategori] || { icon: "fa-image", accents: [] };
+  return photoIllustration(k.icon, k.accents, caption);
+}
 
 /* ---------- Helper: badge kelas berdasarkan status umum ---------- */
 function statusBadgeClass(status) {

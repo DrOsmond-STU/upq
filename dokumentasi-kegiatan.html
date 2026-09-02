@@ -80,12 +80,10 @@
   renderPublicHeader("dokumentasi");
   renderPublicFooter();
 
-  const iconByKategori = { "Produksi":"fa-industry", "Kunjungan Literasi":"fa-people-group", "Pelatihan":"fa-chalkboard-user", "Seremonial":"fa-flag" };
-
   function renderDocs(list){
     document.getElementById("doc-grid").innerHTML = list.length ? list.map(d => `
       <div class="card card-hover overflow-hidden">
-        <div class="photo-ph aspect-video"><i class="fa-solid ${iconByKategori[d.kategori] || 'fa-image'}"></i></div>
+        <div class="photo-ph aspect-video">${photoIllustrationForKategori(d.kategori)}</div>
         <div class="p-5">
           <span class="badge badge-info mb-2">${d.kategori}</span>
           <h3 class="font-bold text-[15px] text-[var(--ink-900)] leading-snug">${d.judul}</h3>
