@@ -60,6 +60,45 @@ npx tailwindcss -i ./input.css -o assets/css/tailwind.min.css --minify \
 ```
 (`input.css` cukup berisi `@tailwind base; @tailwind components; @tailwind utilities;`)
 
+## Menambahkan Foto (galeri, berita di beranda, slide hero)
+
+Purwarupa ini **tanpa backend/CMS**, jadi menambah foto dilakukan dengan cara
+paling sederhana: upload file gambar dengan nama yang tepat ke folder yang
+tepat. Tidak perlu ubah kode HTML sama sekali. Setiap folder gambar juga
+punya file `BACA-DULU.md` berisi instruksi yang sama seperti di bawah ini.
+
+Selama sebuah foto belum diunggah, halaman otomatis menampilkan ilustrasi
+ikon sebagai pengganti (bukan kotak kosong) — jadi aman diunggah bertahap.
+
+| Bagian | Folder | Aturan nama file |
+|---|---|---|
+| Slide hero (beranda) | `assets/img/hero/` | `slide-1.jpg`, `slide-2.jpg`, `slide-3.jpg`, `slide-4.jpg` |
+| Kolase "Tentang UPQ" (beranda) | `assets/img/tentang/` | `area-produksi.jpg`, `ruang-kunjungan.jpg`, `kunjungan-pelajar.jpg`, `tashih-mushaf.jpg` |
+| Galeri Dokumentasi Kegiatan **+ preview "berita" di beranda** | `assets/img/galeri/` | `<id>.jpg` — `id` diambil dari data di bawah |
+
+### Galeri & "berita" (satu sumber data yang sama)
+Situs ini belum punya halaman "Berita" terpisah — bagian **Dokumentasi
+Kegiatan** (galeri) itulah yang juga tampil sebagai daftar "berita terbaru"
+di beranda (3 item terbaru). Jadi menambah foto/berita = menambah 1 item di
+galeri.
+
+Datanya ada di `assets/js/data.js`, array `DATA_DOKUMENTASI`:
+```js
+{ id: "kunjungan-untirta-2026", judul: "Kunjungan Universitas Untirta", kategori: "Kunjungan Literasi", tgl: "10 Sep 2026" },
+```
+- **Foto untuk item yang sudah ada**: upload `assets/img/galeri/<id>.jpg`
+  sesuai `id` item tersebut (lihat daftar id di `assets/img/galeri/BACA-DULU.md`).
+- **Item galeri/berita baru**: tambahkan objek baru ke array
+  `DATA_DOKUMENTASI` (judul, `kategori` salah satu dari `Produksi` /
+  `Kunjungan Literasi` / `Pelatihan` / `Seremonial`, dan tanggal), lalu upload
+  foto dengan nama `<id-yang-dipilih>.jpg` ke `assets/img/galeri/`. Item baru
+  otomatis muncul di halaman Dokumentasi Kegiatan, dan di beranda jika masuk
+  3 teratas.
+
+Rekomendasi ukuran foto: galeri/berita rasio 16:9 (≥800×450px), kolase
+Tentang UPQ rasio 1:1 (≥600×600px), slide hero landscape lebar (≥1600×900px).
+Kompres dulu supaya halaman tetap ringan.
+
 ## Menjalankan Secara Lokal
 Situs statis murni — cukup buka `index.html` langsung di browser, atau jalankan
 server statis sederhana agar fetch/relative path bekerja optimal:

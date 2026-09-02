@@ -15,8 +15,10 @@
 
 <div id="site-header"></div>
 
-<!-- HERO -->
-<section class="bg-brand-gradient bg-noise-pattern relative overflow-hidden">
+<!-- HERO (slider foto + lapisan transparan supaya teks tetap terbaca) -->
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0" id="hero-slides"></div>
+  <div class="absolute inset-0 z-[1]" style="background:linear-gradient(100deg,rgba(9,22,17,.92) 0%,rgba(10,58,42,.86) 30%,rgba(10,90,65,.62) 58%,rgba(18,148,111,.34) 100%)"></div>
   <div class="container py-16 md:py-24 grid md:grid-cols-2 gap-10 items-center relative z-10">
     <div class="text-white">
       <span class="eyebrow text-white"><span class="text-[var(--gold-300)]">●</span> Kementerian Agama Republik Indonesia</span>
@@ -69,7 +71,8 @@
       </div>
     </div>
   </div>
-  <svg class="absolute -bottom-1 left-0 w-full text-[var(--bg)]" viewBox="0 0 1440 60" fill="currentColor" preserveAspectRatio="none" style="height:52px"><path d="M0,32 C240,64 480,0 720,16 C960,32 1200,64 1440,24 L1440,60 L0,60 Z"></path></svg>
+  <div class="absolute bottom-14 md:bottom-16 left-1/2 -translate-x-1/2 z-10 flex gap-2" id="hero-dots"></div>
+  <svg class="absolute -bottom-1 left-0 w-full text-[var(--bg)] z-[5]" viewBox="0 0 1440 60" fill="currentColor" preserveAspectRatio="none" style="height:52px"><path d="M0,32 C240,64 480,0 720,16 C960,32 1200,64 1440,24 L1440,60 L0,60 Z"></path></svg>
 </section>
 
 <!-- QUICK ACCESS -->
@@ -238,21 +241,26 @@
 <script>
   renderPublicHeader("beranda");
   renderPublicFooter();
+  initHeroSlider();
 
   // --- Foto kegiatan: kolase "Tentang UPQ" (4 ubin, tinggi seragam) ---
+  // Taruh file di assets/img/tentang/<id>.jpg untuk mengganti ilustrasi dengan foto asli.
   const tentangPhotos = [
-    { icon: "fa-industry", caption: "Area Produksi" },
-    { icon: "fa-people-roof", caption: "Ruang Kunjungan" },
-    { icon: "fa-people-group", caption: "Kunjungan Pelajar" },
-    { icon: "fa-book-open-reader", caption: "Tashih Mushaf" },
+    { id: "area-produksi", icon: "fa-industry", caption: "Area Produksi" },
+    { id: "ruang-kunjungan", icon: "fa-people-roof", caption: "Ruang Kunjungan" },
+    { id: "kunjungan-pelajar", icon: "fa-people-group", caption: "Kunjungan Pelajar" },
+    { id: "tashih-mushaf", icon: "fa-book-open-reader", caption: "Tashih Mushaf" },
   ];
   document.getElementById("tentang-photos").innerHTML = tentangPhotos.map(p => `
-    <div class="photo-ph rounded-2xl aspect-square">${photoIllustration(p.icon, [], p.caption)}</div>`).join("");
+    <div class="photo-ph rounded-2xl aspect-square">
+      <img src="assets/img/tentang/${p.id}.jpg" alt="${p.caption}" loading="lazy" class="photo-real" onerror="this.remove()">
+      ${photoIllustration(p.icon, [], p.caption)}
+    </div>`).join("");
 
-  // --- Dokumentasi terbaru (foto ilustratif sesuai kategori) ---
+  // --- Dokumentasi/berita terbaru (foto asli jika ada, jatuh ke ilustrasi kategori) ---
   document.getElementById("doc-preview").innerHTML = DATA_DOKUMENTASI.slice(0,3).map(d => `
     <div class="card card-hover overflow-hidden">
-      <div class="photo-ph aspect-video">${photoIllustrationForKategori(d.kategori)}</div>
+      <div class="photo-ph aspect-video">${photoOrIllustration(d.id, d.kategori, d.judul)}</div>
       <div class="p-5">
         <span class="badge badge-info mb-2">${d.kategori}</span>
         <h3 class="font-bold text-[15px] text-[var(--ink-900)] leading-snug">${d.judul}</h3>

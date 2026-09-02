@@ -83,7 +83,7 @@
   function renderDocs(list){
     document.getElementById("doc-grid").innerHTML = list.length ? list.map(d => `
       <div class="card card-hover overflow-hidden">
-        <div class="photo-ph aspect-video">${photoIllustrationForKategori(d.kategori)}</div>
+        <div class="photo-ph aspect-video">${photoOrIllustration(d.id, d.kategori, d.judul)}</div>
         <div class="p-5">
           <span class="badge badge-info mb-2">${d.kategori}</span>
           <h3 class="font-bold text-[15px] text-[var(--ink-900)] leading-snug">${d.judul}</h3>

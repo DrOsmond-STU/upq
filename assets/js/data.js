@@ -205,18 +205,78 @@ function showAgendaDetailModal(item, modalId, contentId) {
   openModal(modalId);
 }
 
-/* ---------- 9. Dokumentasi Kegiatan (galeri) ---------- */
+/* ---------- 9. Dokumentasi Kegiatan (galeri) ----------
+   `id` = nama file foto yang dicari di assets/img/galeri/<id>.jpg
+   Belum punya foto asli? Tidak masalah — otomatis jatuh ke ilustrasi kategori.
+   Cara menambah foto & berita baru: lihat README.md bagian "Menambahkan Foto". */
 const DATA_DOKUMENTASI = [
-  { judul: "Kunjungan Literasi SMA Negeri 3 Bogor", kategori: "Kunjungan Literasi", tgl: "18 Agu 2026" },
-  { judul: "Proses Cetak Batch Mushaf Standar #113", kategori: "Produksi", tgl: "15 Agu 2026" },
-  { judul: "Pelatihan K3 Operator Produksi", kategori: "Pelatihan", tgl: "10 Agu 2026" },
-  { judul: "Peresmian Lini Produksi Digital Printing", kategori: "Seremonial", tgl: "20 Agu 2026" },
-  { judul: "Kunjungan Studi Tiru Kanwil Kemenag Banten", kategori: "Kunjungan Literasi", tgl: "05 Agu 2026" },
-  { judul: "Quality Control Mushaf Terjemahan", kategori: "Produksi", tgl: "02 Agu 2026" },
-  { judul: "Kunjungan Pondok Pesantren Al-Falah", kategori: "Kunjungan Literasi", tgl: "29 Jul 2026" },
-  { judul: "Serah Terima Mushaf ke Kanwil Jawa Barat", kategori: "Seremonial", tgl: "25 Jul 2026" },
-  { judul: "Pelatihan Penjilidan untuk Staf Baru", kategori: "Pelatihan", tgl: "20 Jul 2026" },
+  { id: "kunjungan-sman3-bogor", judul: "Kunjungan Literasi SMA Negeri 3 Bogor", kategori: "Kunjungan Literasi", tgl: "18 Agu 2026" },
+  { id: "cetak-batch-113", judul: "Proses Cetak Batch Mushaf Standar #113", kategori: "Produksi", tgl: "15 Agu 2026" },
+  { id: "pelatihan-k3", judul: "Pelatihan K3 Operator Produksi", kategori: "Pelatihan", tgl: "10 Agu 2026" },
+  { id: "peresmian-digital-printing", judul: "Peresmian Lini Produksi Digital Printing", kategori: "Seremonial", tgl: "20 Agu 2026" },
+  { id: "studi-tiru-kanwil-banten", judul: "Kunjungan Studi Tiru Kanwil Kemenag Banten", kategori: "Kunjungan Literasi", tgl: "05 Agu 2026" },
+  { id: "qc-mushaf-terjemahan", judul: "Quality Control Mushaf Terjemahan", kategori: "Produksi", tgl: "02 Agu 2026" },
+  { id: "kunjungan-ponpes-al-falah", judul: "Kunjungan Pondok Pesantren Al-Falah", kategori: "Kunjungan Literasi", tgl: "29 Jul 2026" },
+  { id: "serah-terima-jawa-barat", judul: "Serah Terima Mushaf ke Kanwil Jawa Barat", kategori: "Seremonial", tgl: "25 Jul 2026" },
+  { id: "pelatihan-penjilidan", judul: "Pelatihan Penjilidan untuk Staf Baru", kategori: "Pelatihan", tgl: "20 Jul 2026" },
 ];
+
+/* ---------- Helper: foto asli (jika ada file-nya) + fallback ilustrasi ----------
+   Dipakai untuk kartu galeri/berita: coba tampilkan assets/img/galeri/<id>.jpg,
+   kalau file tidak ditemukan (404) <img> otomatis menyembunyikan diri lewat
+   onerror sehingga ilustrasi kategori di baliknya kembali terlihat.
+   `altText` hanya dipakai untuk atribut alt gambar (aksesibilitas/SEO) — beri
+   `showCaption:true` HANYA bila kartu TIDAK punya judul terpisah di bawah foto
+   (mis. ubin "Tentang UPQ"), supaya judul tidak tampil dobel. */
+function photoOrIllustration(id, kategori, altText = "", showCaption = false) {
+  const imgHtml = id
+    ? `<img src="assets/img/galeri/${id}.jpg" alt="${altText}" loading="lazy" class="photo-real" onerror="this.remove()">`
+    : "";
+  return imgHtml + photoIllustrationForKategori(kategori, showCaption ? altText : "");
+}
+
+/* ---------- Hero slider beranda ----------
+   Taruh file di assets/img/hero/slide-1.jpg s.d. slide-4.jpg untuk mengisi slide
+   dengan foto asli. Selama file belum ada, otomatis jatuh ke gradasi hijau. */
+const HERO_SLIDES = [
+  { img: "assets/img/hero/slide-1.jpg", alt: "Area produksi percetakan Al-Qur'an UPQ" },
+  { img: "assets/img/hero/slide-2.jpg", alt: "Kunjungan literasi pelajar ke UPQ" },
+  { img: "assets/img/hero/slide-3.jpg", alt: "Proses tashih Mushaf Al-Qur'an" },
+  { img: "assets/img/hero/slide-4.jpg", alt: "Kegiatan seremonial UPQ" },
+];
+function initHeroSlider() {
+  const wrap = document.getElementById("hero-slides");
+  const dotsWrap = document.getElementById("hero-dots");
+  if (!wrap || !dotsWrap) return;
+
+  wrap.innerHTML = HERO_SLIDES.map((s, i) => `
+    <div class="hero-slide ${i === 0 ? "active" : ""}">
+      <img src="${s.img}" alt="${s.alt}" loading="${i === 0 ? "eager" : "lazy"}" onerror="this.parentElement.classList.add('hero-slide-fallback')">
+    </div>`).join("");
+  dotsWrap.innerHTML = HERO_SLIDES.map((_, i) => `<button class="hero-dot ${i === 0 ? "active" : ""}" aria-label="Slide ${i + 1}"></button>`).join("");
+
+  const slides = [...wrap.querySelectorAll(".hero-slide")];
+  const dots = [...dotsWrap.querySelectorAll(".hero-dot")];
+  let current = 0;
+  function goTo(i) {
+    slides[current].classList.remove("active");
+    dots[current].classList.remove("active");
+    current = (i + slides.length) % slides.length;
+    slides[current].classList.add("active");
+    dots[current].classList.add("active");
+  }
+  dots.forEach((d, i) => d.addEventListener("click", () => { goTo(i); resetTimer(); }));
+
+  let timer = null;
+  function resetTimer() {
+    clearInterval(timer);
+    timer = setInterval(() => goTo(current + 1), 6000);
+  }
+  resetTimer();
+  const section = wrap.closest("section");
+  section?.addEventListener("mouseenter", () => clearInterval(timer));
+  section?.addEventListener("mouseleave", resetTimer);
+}
 
 /* ---------- Helper: ilustrasi "foto kegiatan" (belum ada aset foto asli) ----------
    Dipakai di dalam kartu ber-class .photo-ph — menghasilkan lencana ikon besar
