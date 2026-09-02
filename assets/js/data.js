@@ -237,12 +237,14 @@ function photoOrIllustration(id, kategori, altText = "", showCaption = false) {
 
 /* ---------- Hero slider beranda ----------
    Taruh file di assets/img/hero/slide-1.jpg s.d. slide-4.jpg untuk mengisi slide
-   dengan foto asli. Selama file belum ada, otomatis jatuh ke gradasi hijau. */
+   dengan foto asli. Selama file belum ada, tiap slide jatuh ke gradasi + ikon
+   watermark BERBEDA satu sama lain (bukan warna polos yang sama semua) — supaya
+   pergantian slide tetap terlihat jelas walau belum ada foto sungguhan. */
 const HERO_SLIDES = [
-  { img: "assets/img/hero/slide-1.jpg", alt: "Area produksi percetakan Al-Qur'an UPQ" },
-  { img: "assets/img/hero/slide-2.jpg", alt: "Kunjungan literasi pelajar ke UPQ" },
-  { img: "assets/img/hero/slide-3.jpg", alt: "Proses tashih Mushaf Al-Qur'an" },
-  { img: "assets/img/hero/slide-4.jpg", alt: "Kegiatan seremonial UPQ" },
+  { img: "assets/img/hero/slide-1.jpg", alt: "Area produksi percetakan Al-Qur'an UPQ", icon: "fa-industry" },
+  { img: "assets/img/hero/slide-2.jpg", alt: "Kunjungan literasi pelajar ke UPQ", icon: "fa-people-group" },
+  { img: "assets/img/hero/slide-3.jpg", alt: "Proses tashih Mushaf Al-Qur'an", icon: "fa-book-open-reader" },
+  { img: "assets/img/hero/slide-4.jpg", alt: "Kegiatan seremonial UPQ", icon: "fa-flag" },
 ];
 function initHeroSlider() {
   const wrap = document.getElementById("hero-slides");
@@ -250,8 +252,9 @@ function initHeroSlider() {
   if (!wrap || !dotsWrap) return;
 
   wrap.innerHTML = HERO_SLIDES.map((s, i) => `
-    <div class="hero-slide ${i === 0 ? "active" : ""}">
+    <div class="hero-slide hero-slide-${i + 1} ${i === 0 ? "active" : ""}">
       <img src="${s.img}" alt="${s.alt}" loading="${i === 0 ? "eager" : "lazy"}" onerror="this.parentElement.classList.add('hero-slide-fallback')">
+      <i class="fa-solid ${s.icon} hero-slide-watermark"></i>
     </div>`).join("");
   dotsWrap.innerHTML = HERO_SLIDES.map((_, i) => `<button class="hero-dot ${i === 0 ? "active" : ""}" aria-label="Slide ${i + 1}"></button>`).join("");
 
