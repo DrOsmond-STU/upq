@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Permohonan Mushaf — Sistem Manajemen Data UPQ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="assets/css/tailwind.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="app-shell" id="app-shell"></div>
+
+<template id="page-template">
+  <div class="rounded-xl bg-[var(--brand-50)] p-4 text-sm text-[var(--brand-800)] mb-6 flex gap-3">
+    <i class="fa-solid fa-circle-info mt-0.5"></i>
+    <span>Permohonan bantuan/donasi Mushaf Al-Qur'an dari masjid, yayasan, lembaga pendidikan, dan organisasi masyarakat. Alur: Verifikasi Dokumen → Alokasi Stok → Persetujuan Pimpinan → Penerbitan Surat &amp; QR Code → Pengambilan.</span>
+  </div>
+
+  <div class="grid sm:grid-cols-4 gap-5 mb-6">
+    <div class="kpi-card"><div class="text-xs text-[var(--ink-500)] mb-1">Total Permohonan</div><div class="stat-num !text-2xl text-[var(--ink-900)]">7</div></div>
+    <div class="kpi-card"><div class="text-xs text-[var(--ink-500)] mb-1">Menunggu Verifikasi/Revisi</div><div class="stat-num !text-2xl text-[var(--info-text)]">2</div></div>
+    <div class="kpi-card"><div class="text-xs text-[var(--ink-500)] mb-1">Menunggu Persetujuan</div><div class="stat-num !text-2xl text-[var(--warn-text)]">2</div></div>
+    <div class="kpi-card"><div class="text-xs text-[var(--ink-500)] mb-1">Disetujui / Selesai</div><div class="stat-num !text-2xl text-[var(--ok-text)]">2</div></div>
+  </div>
+
+  <div class="card p-5 md:p-6">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
+      <div class="flex flex-wrap gap-2" id="status-filter">
+        <button data-status="Semua" class="btn btn-sm btn-primary sf-btn">Semua</button>
+        <button data-status="Menunggu Verifikasi" class="btn btn-sm btn-line sf-btn">Menunggu Verifikasi</button>
+        <button data-status="Revisi" class="btn btn-sm btn-line sf-btn">Revisi</button>
+        <button data-status="Verifikasi Stok" class="btn btn-sm btn-line sf-btn">Verifikasi Stok</button>
+        <button data-status="Menunggu Persetujuan Pimpinan" class="btn btn-sm btn-line sf-btn">Menunggu Persetujuan</button>
+        <button data-status="Disetujui" class="btn btn-sm btn-line sf-btn">Disetujui</button>
+        <button data-status="Selesai" class="btn btn-sm btn-line sf-btn">Selesai</button>
+        <button data-status="Ditolak" class="btn btn-sm btn-line sf-btn">Ditolak</button>
+      </div>
+      <div class="input-icon-wrap w-64"><i class="fa-solid fa-magnifying-glass text-sm"></i><input id="search-pm" class="input !py-2 text-sm" placeholder="Cari no. permohonan / lembaga..."></div>
+    </div>
+    <div class="table-wrap !border-none">
+      <table class="data-table">
+        <thead><tr><th>No. Permohonan</th><th>Lembaga</th><th>Jenis</th><th>Diminta</th><th>Disetujui</th><th>Tanggal</th><th>Status</th><th></th></tr></thead>
+        <tbody id="tbl-pm"></tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<!-- DETAIL MODAL -->
+<div id="modal-detail" class="modal-backdrop hidden">
+  <div class="modal-box !max-w-3xl" id="detail-content"></div>
+</div>
+
+<script src="assets/js/layout.js"></script>
+<script src="assets/js/data.js"></script>
+<script>
+  renderInternalShell({ active: "permohonan-mushaf", title: "Permohonan Mushaf", breadcrumb: ["Internal","Permohonan Mushaf"] });
+  document.getElementById("page-content").innerHTML = document.getElementById("page-template").innerHTML;
+
+  const rowTpl = p => `
+    <tr class="cursor-pointer" onclick="showDetail('${p.id}')">
+      <td class="font-bold text-[var(--brand-600)]">${p.id}</td>
+      <td>${p.lembaga}</td>
+      <td><span class="badge badge-neutral">${p.jenis}</span></td>
+      <td>${p.jumlahDiminta} eks</td>
+      <td>${p.jumlahDisetujui !== null ? p.jumlahDisetujui + " eks" : "—"}</td>
+      <td>${p.tglAjukan}</td>
+      <td>${badge(p.status)}</td>
+      <td><button class="text-[var(--brand-600)] font-bold text-xs">Detail <i class="fa-solid fa-chevron-right text-[10px]"></i></button></td>
+    </tr>`;
+
+  let activeStatus = "Semua";
+  function applyFilter(){
+    const q = document.getElementById("search-pm").value.trim().toLowerCase();
+    const rows = DATA_PERMOHONAN_MUSHAF.filter(p =>
+      (activeStatus === "Semua" || p.status === activeStatus) &&
+      (!q || p.id.toLowerCase().includes(q) || p.lembaga.toLowerCase().includes(q))
+    );
+    renderRows("tbl-pm", rows, rowTpl);
+  }
+  document.querySelectorAll(".sf-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".sf-btn").forEach(b => b.classList.replace("btn-primary","btn-line"));
+      btn.classList.replace("btn-line","btn-primary");
+      activeStatus = btn.dataset.status;
+      applyFilter();
+    });
+  });
+  document.getElementById("search-pm").addEventListener("input", applyFilter);
+  applyFilter();
+
+  // Tahapan alur, dipakai untuk menandai posisi status saat ini di modal detail.
+  const ALUR_STAGES = ["Menunggu Verifikasi", "Verifikasi Stok", "Menunggu Persetujuan Pimpinan", "Disetujui", "Selesai"];
+
+  function showDetail(id){
+    const p = DATA_PERMOHONAN_MUSHAF.find(x => x.id === id);
+    if (!p) return;
+    const isRejectedOrRevision = p.status === "Ditolak" || p.status === "Revisi";
+    const stageIndex = ALUR_STAGES.indexOf(p.status);
+
+    const stageHtml = isRejectedOrRevision ? "" : `
+      <div class="timeline mt-5">
+        ${ALUR_STAGES.map((s, i) => `
+          <div class="timeline-item ${i < stageIndex ? 'done' : ''} ${i === stageIndex ? 'current' : ''}">
+            <div class="timeline-dot"><i class="fa-solid ${i < stageIndex ? 'fa-check' : 'fa-circle'} ${i < stageIndex ? '' : 'text-[8px]'}"></i></div>
+            <div class="font-bold text-sm ${i <= stageIndex ? 'text-[var(--ink-900)]' : 'text-[var(--ink-300)]'}">${s}</div>
+          </div>`).join("")}
+      </div>`;
+
+    const qrHtml = p.qrCode ? `
+      <div class="rounded-xl border border-[var(--line)] p-4 flex items-center gap-4 mt-5">
+        <div class="w-16 h-16 rounded-lg bg-[var(--ink-900)] text-white flex items-center justify-center text-2xl flex-none"><i class="fa-solid fa-qrcode"></i></div>
+        <div>
+          <div class="text-xs text-[var(--ink-500)] font-bold uppercase">QR Code Surat Persetujuan</div>
+          <div class="font-mono text-sm font-bold text-[var(--ink-900)] mt-0.5">${p.qrCode}</div>
+          <div class="text-xs text-[var(--ink-500)] mt-0.5">${p.status === "Selesai" ? "Sudah dipindai petugas gudang." : "Menunggu dipindai saat pengambilan di UPQ."}</div>
+        </div>
+      </div>` : "";
+
+    const actionHtml = p.status === "Menunggu Verifikasi" ? `
+        <button class="btn btn-line btn-sm"><i class="fa-solid fa-rotate-left"></i>Minta Revisi</button>
+        <button class="btn btn-line btn-sm !text-[var(--danger-text)] !border-[var(--danger-text)]"><i class="fa-solid fa-xmark"></i>Tolak</button>
+        <button class="btn btn-primary btn-sm"><i class="fa-solid fa-check"></i>Sesuai, Lanjutkan</button>`
+      : p.status === "Verifikasi Stok" ? `
+        <button class="btn btn-primary btn-sm"><i class="fa-solid fa-warehouse"></i>Konfirmasi Stok Tersedia</button>`
+      : p.status === "Menunggu Persetujuan Pimpinan" ? `
+        <button class="btn btn-line btn-sm !text-[var(--danger-text)] !border-[var(--danger-text)]"><i class="fa-solid fa-xmark"></i>Tolak</button>
+        <button class="btn btn-primary btn-sm"><i class="fa-solid fa-signature"></i>Setujui &amp; Terbitkan Surat</button>`
+      : p.status === "Revisi" ? `
+        <button class="btn btn-primary btn-sm"><i class="fa-solid fa-paper-plane"></i>Kirim Ulang Catatan ke Pemohon</button>`
+      : "";
+
+    document.getElementById("detail-content").innerHTML = `
+      <div class="flex items-center justify-between px-6 py-5 border-b border-[var(--line)]">
+        <div>
+          <div class="text-xs text-[var(--ink-500)] font-semibold">${p.id} · Diajukan ${p.tglAjukan}</div>
+          <h3 class="font-display font-bold text-lg text-[var(--ink-900)]">${p.lembaga}</h3>
+        </div>
+        <button onclick="closeModal('modal-detail')" class="text-[var(--ink-300)] hover:text-[var(--ink-900)]"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div class="p-6">
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="text-sm space-y-2">
+            <div class="flex justify-between"><span class="text-[var(--ink-500)]">Jenis Lembaga</span><span class="font-semibold">${p.jenis}</span></div>
+            <div class="flex justify-between"><span class="text-[var(--ink-500)]">Penanggung Jawab</span><span class="font-semibold">${p.penanggungJawab}</span></div>
+            <div class="flex justify-between"><span class="text-[var(--ink-500)]">Kontak</span><span class="font-semibold">${p.kontak}</span></div>
+            <div class="flex justify-between gap-4"><span class="text-[var(--ink-500)] flex-none">Alamat</span><span class="font-semibold text-right">${p.alamat}</span></div>
+          </div>
+          <div class="text-sm space-y-2">
+            <div class="flex justify-between"><span class="text-[var(--ink-500)]">Jumlah Diminta</span><span class="font-semibold">${p.jumlahDiminta} eks</span></div>
+            <div class="flex justify-between"><span class="text-[var(--ink-500)]">Jumlah Disetujui</span><span class="font-semibold">${p.jumlahDisetujui !== null ? p.jumlahDisetujui + " eks" : "Belum ditentukan"}</span></div>
+            <div class="flex justify-between"><span class="text-[var(--ink-500)]">Stok Tersedia (referensi)</span><span class="font-semibold">${STOK_MUSHAF_TERSEDIA.toLocaleString("id-ID")} eks</span></div>
+            <div class="flex justify-between"><span class="text-[var(--ink-500)]">Status</span>${badge(p.status)}</div>
+          </div>
+        </div>
+        <div class="mt-5">
+          <div class="text-xs font-bold text-[var(--ink-500)] uppercase mb-1.5">Alasan Permohonan</div>
+          <p class="text-sm text-[var(--ink-700)] leading-relaxed">${p.alasan}</p>
+        </div>
+        <div class="mt-5 flex gap-3">
+          <div class="flex-1 rounded-xl border border-[var(--line)] p-3 flex items-center gap-2 text-sm"><i class="fa-solid fa-file-pdf text-[var(--danger-text)]"></i>Surat Permohonan Resmi.pdf</div>
+          <div class="flex-1 rounded-xl border border-[var(--line)] p-3 flex items-center gap-2 text-sm"><i class="fa-solid fa-id-card text-[var(--brand-600)]"></i>KTP Penanggung Jawab.jpg</div>
+        </div>
+        ${p.catatan ? `
+        <div class="mt-5 rounded-xl p-4 ${p.status === 'Ditolak' ? 'bg-[var(--danger-bg)]' : p.status === 'Revisi' ? 'bg-[var(--warn-bg)]' : 'bg-[var(--ok-bg)]'}">
+          <div class="text-xs font-bold uppercase mb-1.5 ${p.status === 'Ditolak' ? 'text-[var(--danger-text)]' : p.status === 'Revisi' ? 'text-[var(--warn-text)]' : 'text-[var(--ok-text)]'}">Catatan Verifikator / Sistem</div>
+          <p class="text-sm leading-relaxed">${p.catatan}</p>
+        </div>` : ""}
+        ${stageHtml}
+        ${qrHtml}
+      </div>
+      <div class="px-6 py-4 border-t border-[var(--line)] flex justify-end gap-3">
+        ${actionHtml}
+      </div>
+    `;
+    openModal("modal-detail");
+  }
+</script>
+</body>
+</html>

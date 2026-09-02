@@ -25,6 +25,13 @@ const PUBLIC_NAV = [
       { label: "Daftar Kunjungan", href: "pendaftaran-kunjungan.html", desc: "Formulir pendaftaran rombongan" },
     ],
   },
+  {
+    label: "Permohonan Mushaf", key: "permohonan-mushaf", href: "permohonan-mushaf.html",
+    children: [
+      { label: "Informasi & Alur", href: "permohonan-mushaf.html", desc: "Syarat, alur, dan tarif bantuan Mushaf" },
+      { label: "Ajukan Permohonan", href: "pendaftaran-permohonan-mushaf.html", desc: "Formulir permohonan bantuan Mushaf" },
+    ],
+  },
   { label: "Dokumentasi Kegiatan", href: "dokumentasi-kegiatan.html", key: "dokumentasi" },
   { label: "Jadwal Kegiatan", href: "jadwal-kegiatan.html", key: "jadwal" },
   { label: "Kontak", href: "index.html#kontak", key: "kontak" },
@@ -189,6 +196,7 @@ const INTERNAL_NAV = [
       { key: "finish-good", label: "Finish Good / Gudang", href: "internal-finish-good.html" },
     ],
   },
+  { key: "permohonan-mushaf", label: "Permohonan Mushaf", icon: "fa-hand-holding-heart", href: "internal-permohonan-mushaf.html" },
   { key: "tracking-pengiriman", label: "Tracking Pengiriman Mushaf", icon: "fa-truck-fast", href: "internal-tracking-pengiriman.html" },
   { key: "pnbp", label: "PNBP Pihak Ketiga", icon: "fa-file-invoice-dollar", href: "internal-pnbp.html" },
 ];

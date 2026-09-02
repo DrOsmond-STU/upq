@@ -45,23 +45,57 @@
       <div class="space-y-4">
         <div class="flex gap-4">
           <div class="flex flex-col items-center"><div class="w-9 h-9 rounded-full bg-[var(--brand-600)] text-white flex items-center justify-center font-bold text-sm flex-none">1</div><div class="w-0.5 flex-1 bg-[var(--line)] my-1"></div></div>
-          <div class="pb-6"><div class="font-bold text-sm text-[var(--ink-900)]">Ajukan Pendaftaran Online</div><div class="text-sm text-[var(--ink-500)] mt-1">Isi formulir pendaftaran kunjungan beserta surat permohonan resmi dari instansi.</div></div>
+          <div class="pb-6">
+            <div class="flex items-center gap-2 flex-wrap"><span class="font-bold text-sm text-[var(--ink-900)]">Pemilihan Jadwal &amp; Pengisian Data Rombongan</span><span class="badge badge-neutral"><i class="fa-solid fa-user mr-1"></i>Pemohon</span></div>
+            <ul class="text-sm text-[var(--ink-500)] mt-1.5 space-y-1 list-disc list-inside">
+              <li>Membuka Kalender Kunjungan untuk melihat slot tanggal &amp; jam yang masih tersedia</li>
+              <li>Memilih tanggal kunjungan &amp; menginput jumlah rombongan (mis. 50 siswa, 5 guru pendamping)</li>
+              <li>Mengunggah Surat Pengantar Kunjungan Resmi dari sekolah/instansi</li>
+            </ul>
+          </div>
         </div>
         <div class="flex gap-4">
           <div class="flex flex-col items-center"><div class="w-9 h-9 rounded-full bg-[var(--brand-600)] text-white flex items-center justify-center font-bold text-sm flex-none">2</div><div class="w-0.5 flex-1 bg-[var(--line)] my-1"></div></div>
-          <div class="pb-6"><div class="font-bold text-sm text-[var(--ink-900)]">Verifikasi oleh Panitia</div><div class="text-sm text-[var(--ink-500)] mt-1">Tim UPQ memverifikasi ketersediaan jadwal dan kelengkapan data dalam 2×24 jam kerja.</div></div>
+          <div class="pb-6">
+            <div class="flex items-center gap-2 flex-wrap"><span class="font-bold text-sm text-[var(--ink-900)]">Verifikasi Kapasitas &amp; Surat Pengantar</span><span class="badge badge-info"><i class="fa-solid fa-user-check mr-1"></i>Verifikator</span></div>
+            <ul class="text-sm text-[var(--ink-500)] mt-1.5 space-y-1 list-disc list-inside">
+              <li>Memeriksa kesesuaian jumlah rombongan dengan kapasitas &amp; keabsahan surat pengantar</li>
+              <li>Jika tanggal berbenturan/melebihi kuota, Verifikator menyarankan reschedule ke Pemohon</li>
+              <li>Slot jadwal dikonfirmasi &amp; dikunci (lock) pada kalender sistem</li>
+            </ul>
+          </div>
         </div>
         <div class="flex gap-4">
           <div class="flex flex-col items-center"><div class="w-9 h-9 rounded-full bg-[var(--brand-600)] text-white flex items-center justify-center font-bold text-sm flex-none">3</div><div class="w-0.5 flex-1 bg-[var(--line)] my-1"></div></div>
-          <div class="pb-6"><div class="font-bold text-sm text-[var(--ink-900)]">Konfirmasi Jadwal</div><div class="text-sm text-[var(--ink-500)] mt-1">Instansi menerima konfirmasi jadwal & titik kumpul melalui email/WhatsApp resmi UPQ.</div></div>
+          <div class="pb-6">
+            <div class="flex items-center gap-2 flex-wrap"><span class="font-bold text-sm text-[var(--ink-900)]">Penerbitan Tiket Kunjungan (QR Code)</span><span class="badge" style="background:#fdf3e0;color:#8a5a00"><i class="fa-solid fa-user-tie mr-1"></i>Pimpinan</span></div>
+            <ul class="text-sm text-[var(--ink-500)] mt-1.5 space-y-1 list-disc list-inside">
+              <li>Menerbitkan Surat Izin Kunjungan (Tiket Kunjungan) beserta QR Code Masuk</li>
+              <li>Pimpinan berhak menolak kunjungan apabila tidak sesuai prosedur</li>
+            </ul>
+          </div>
         </div>
         <div class="flex gap-4">
           <div class="flex flex-col items-center"><div class="w-9 h-9 rounded-full bg-[var(--brand-600)] text-white flex items-center justify-center font-bold text-sm flex-none">4</div><div class="w-0.5 flex-1 bg-[var(--line)] my-1"></div></div>
-          <div class="pb-6"><div class="font-bold text-sm text-[var(--ink-900)]">Pelaksanaan Kunjungan</div><div class="text-sm text-[var(--ink-500)] mt-1">Rombongan mengikuti tur area produksi, pemaparan proses tashih, dan sesi tanya-jawab.</div></div>
+          <div class="pb-6">
+            <div class="flex items-center gap-2 flex-wrap"><span class="font-bold text-sm text-[var(--ink-900)]">Pelaksanaan Kunjungan di Lokasi</span><span class="badge badge-neutral"><i class="fa-solid fa-people-carry-box mr-1"></i>Pemohon &amp; Petugas UPQ</span></div>
+            <ul class="text-sm text-[var(--ink-500)] mt-1.5 space-y-1 list-disc list-inside">
+              <li>Rombongan tiba di UPQ sesuai jadwal</li>
+              <li>Ketua rombongan menunjukkan QR Code Tiket Kunjungan ke penerima tamu/security</li>
+              <li>Petugas memindai (scan) QR Code melalui aplikasi Admin untuk verifikasi kedatangan (check-in)</li>
+            </ul>
+          </div>
         </div>
         <div class="flex gap-4">
           <div class="flex flex-col items-center"><div class="w-9 h-9 rounded-full bg-[var(--brand-600)] text-white flex items-center justify-center font-bold text-sm flex-none">5</div></div>
-          <div><div class="font-bold text-sm text-[var(--ink-900)]">Sertifikat &amp; Dokumentasi</div><div class="text-sm text-[var(--ink-500)] mt-1">Peserta menerima sertifikat kunjungan dan dokumentasi foto kegiatan.</div></div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap"><span class="font-bold text-sm text-[var(--ink-900)]">Survei Kepuasan &amp; Sertifikat</span><span class="badge badge-neutral"><i class="fa-solid fa-user mr-1"></i>Pemohon</span></div>
+            <ul class="text-sm text-[var(--ink-500)] mt-1.5 space-y-1 list-disc list-inside">
+              <li>Status otomatis berubah menjadi <strong class="text-[var(--ink-900)]">Kunjungan Selesai</strong></li>
+              <li>Mengisi Survei Kepuasan Masyarakat (SKM) singkat di website</li>
+              <li>Mengunduh sertifikat/bukti kunjungan (opsional)</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -84,11 +118,19 @@
         </div>
         <div class="accordion-item">
           <button class="accordion-btn">Apa saja yang perlu dibawa saat kunjungan? <i class="fa-solid fa-chevron-down"></i></button>
-          <div class="accordion-panel"><div class="accordion-panel-in">Peserta membawa surat konfirmasi kunjungan, kartu identitas, dan mengenakan pakaian sopan/rapi sesuai etika kawasan produksi.</div></div>
+          <div class="accordion-panel"><div class="accordion-panel-in">Ketua rombongan wajib membawa/menunjukkan QR Code Tiket Kunjungan (dikirim setelah disetujui Pimpinan) untuk proses check-in, kartu identitas, dan mengenakan pakaian sopan/rapi sesuai etika kawasan produksi.</div></div>
         </div>
         <div class="accordion-item">
-          <button class="accordion-btn">Bisakah jadwal kunjungan diubah setelah dikonfirmasi? <i class="fa-solid fa-chevron-down"></i></button>
-          <div class="accordion-panel"><div class="accordion-panel-in">Perubahan jadwal dapat diajukan maksimal 3 hari sebelum tanggal kunjungan melalui kontak panitia, mengikuti ketersediaan slot.</div></div>
+          <button class="accordion-btn">Bagaimana jika tanggal yang dipilih ternyata sudah penuh? <i class="fa-solid fa-chevron-down"></i></button>
+          <div class="accordion-panel"><div class="accordion-panel-in">Jika tanggal berbenturan dengan rombongan lain atau melebihi kuota kapasitas, Verifikator akan menghubungi Pemohon dan menyarankan reschedule ke tanggal/slot lain yang masih tersedia di kalender.</div></div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-btn">Bagaimana proses check-in di lokasi UPQ? <i class="fa-solid fa-chevron-down"></i></button>
+          <div class="accordion-panel"><div class="accordion-panel-in">Ketua rombongan menunjukkan QR Code Tiket Kunjungan kepada penerima tamu/security, lalu petugas memindai QR Code tersebut melalui aplikasi Admin untuk verifikasi kedatangan (check-in).</div></div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-btn">Apakah ada survei setelah kunjungan selesai? <i class="fa-solid fa-chevron-down"></i></button>
+          <div class="accordion-panel"><div class="accordion-panel-in">Ya. Setelah kunjungan berakhir, status otomatis berubah menjadi "Kunjungan Selesai" dan Pemohon diminta mengisi Survei Kepuasan Masyarakat (SKM) singkat secara online, lalu dapat mengunduh sertifikat/bukti kunjungan.</div></div>
         </div>
       </div>
     </div>
@@ -99,7 +141,7 @@
     <div class="card p-6">
       <h3 class="font-bold text-[15px] text-[var(--ink-900)] mb-4"><i class="fa-solid fa-list-check text-[var(--brand-600)] mr-2"></i>Syarat Kunjungan</h3>
       <ul class="space-y-3 text-sm text-[var(--ink-500)]">
-        <li class="flex gap-2"><i class="fa-solid fa-circle-check text-[var(--brand-500)] mt-0.5"></i>Surat permohonan resmi dari instansi/sekolah</li>
+        <li class="flex gap-2"><i class="fa-solid fa-circle-check text-[var(--brand-500)] mt-0.5"></i>Surat Pengantar Kunjungan Resmi dari instansi/sekolah</li>
         <li class="flex gap-2"><i class="fa-solid fa-circle-check text-[var(--brand-500)] mt-0.5"></i>Minimal 10, maksimal 80 peserta per sesi</li>
         <li class="flex gap-2"><i class="fa-solid fa-circle-check text-[var(--brand-500)] mt-0.5"></i>Didampingi minimal 1 penanggung jawab rombongan</li>
         <li class="flex gap-2"><i class="fa-solid fa-circle-check text-[var(--brand-500)] mt-0.5"></i>Mengisi formulir pendaftaran online</li>
@@ -113,7 +155,8 @@
         <li class="flex gap-2"><i class="fa-solid fa-check text-[var(--brand-500)]"></i>Tur area produksi didampingi pemandu</li>
         <li class="flex gap-2"><i class="fa-solid fa-check text-[var(--brand-500)]"></i>Pemaparan proses tashih Al-Qur'an</li>
         <li class="flex gap-2"><i class="fa-solid fa-check text-[var(--brand-500)]"></i>Sesi tanya jawab interaktif</li>
-        <li class="flex gap-2"><i class="fa-solid fa-check text-[var(--brand-500)]"></i>Sertifikat kunjungan resmi</li>
+        <li class="flex gap-2"><i class="fa-solid fa-check text-[var(--brand-500)]"></i>Tiket Kunjungan berbentuk QR Code untuk check-in</li>
+        <li class="flex gap-2"><i class="fa-solid fa-check text-[var(--brand-500)]"></i>Sertifikat kunjungan resmi (setelah mengisi survei)</li>
         <li class="flex gap-2"><i class="fa-solid fa-check text-[var(--brand-500)]"></i>Dokumentasi foto kegiatan</li>
         <li class="flex gap-2"><i class="fa-solid fa-check text-[var(--brand-500)]"></i>Souvenir Juz 'Amma (selama persediaan ada)</li>
       </ul>

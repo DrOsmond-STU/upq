@@ -134,6 +134,75 @@ const PNBP_TARIF_REF = [
   { layanan: "Jasa Konsultasi Teknis Produksi Percetakan", satuan: "per paket", tarif: "Rp 3.000.000" },
 ];
 
+/* ---------- 7b. Permohonan Mushaf Al-Qur'an (bantuan/donasi ke lembaga) ----------
+   Alur: Registrasi & Pengajuan (Pemohon) -> Verifikasi Dokumen (Verifikator) ->
+   Alokasi Stok (Admin UPQ) -> Approval (Pimpinan) -> Penerbitan Surat & QR Code
+   (Sistem) -> Pengambilan (scan QR di UPQ) -> Selesai. */
+const DATA_PERMOHONAN_MUSHAF = [
+  {
+    id: "PM-2026-0041", tglAjukan: "01 Sep 2026",
+    lembaga: "Masjid Jami' Al-Ikhlas", jenis: "Masjid", penanggungJawab: "H. Rahman Hakim",
+    kontak: "0812-3456-7890", alamat: "Jl. Merdeka No. 12, Kec. Ciawi, Kab. Bogor, Jawa Barat",
+    alasan: "Melengkapi Mushaf untuk jamaah masjid yang terus bertambah, kondisi Mushaf lama sudah banyak yang rusak.",
+    jumlahDiminta: 100, jumlahDisetujui: null,
+    status: "Menunggu Verifikasi", catatan: "",
+  },
+  {
+    id: "PM-2026-0040", tglAjukan: "29 Agu 2026",
+    lembaga: "Yayasan Yatim Piatu Nurul Falah", jenis: "Yayasan", penanggungJawab: "Hj. Siti Rohimah",
+    kontak: "0813-2211-4455", alamat: "Jl. Raya Sukabumi KM 8, Kab. Bogor, Jawa Barat",
+    alasan: "Pengadaan Mushaf untuk kegiatan tahfidz santri asuh di yayasan.",
+    jumlahDiminta: 75, jumlahDisetujui: null,
+    status: "Revisi", catatan: "Surat Permohonan Resmi belum ditandatangani pimpinan lembaga. Mohon unggah ulang dengan tanda tangan & stempel basah/digital.",
+  },
+  {
+    id: "PM-2026-0039", tglAjukan: "26 Agu 2026",
+    lembaga: "Pondok Pesantren Riyadhul Jannah", jenis: "Lembaga Pendidikan", penanggungJawab: "KH. Ahmad Dahlan",
+    kontak: "0857-8899-0011", alamat: "Jl. Cikoneng No. 45, Kab. Bogor, Jawa Barat",
+    alasan: "Kebutuhan Mushaf untuk 200 santri baru tahun ajaran 2026/2027.",
+    jumlahDiminta: 200, jumlahDisetujui: null,
+    status: "Verifikasi Stok", catatan: "Dokumen lengkap & sah. Diteruskan ke Admin UPQ untuk pengecekan ketersediaan stok.",
+  },
+  {
+    id: "PM-2026-0038", tglAjukan: "22 Agu 2026",
+    lembaga: "Majelis Taklim An-Nur", jenis: "Organisasi Masyarakat", penanggungJawab: "Ny. Fatimah Zahra",
+    kontak: "0811-4433-2200", alamat: "Perum Bogor Asri Blok C2, Kab. Bogor, Jawa Barat",
+    alasan: "Mushaf untuk kegiatan pengajian rutin mingguan majelis taklim.",
+    jumlahDiminta: 50, jumlahDisetujui: 40,
+    status: "Menunggu Persetujuan Pimpinan", catatan: "Stok tersedia 40 eks (dari 50 diminta) — menunggu otorisasi final Pimpinan.",
+  },
+  {
+    id: "PM-2026-0037", tglAjukan: "18 Agu 2026",
+    lembaga: "Masjid Agung Baiturrahman", jenis: "Masjid", penanggungJawab: "H. Usman Fauzi",
+    kontak: "0821-5566-7788", alamat: "Jl. Pajajaran No. 88, Kota Bogor, Jawa Barat",
+    alasan: "Penggantian Mushaf lama yang sudah usang untuk shaf utama masjid.",
+    jumlahDiminta: 150, jumlahDisetujui: 150,
+    status: "Disetujui", catatan: "Disetujui penuh oleh Pimpinan. Surat Persetujuan & QR Code pengambilan telah diterbitkan sistem.",
+    qrCode: "PM2026-0037-QR-88231",
+  },
+  {
+    id: "PM-2026-0036", tglAjukan: "12 Agu 2026",
+    lembaga: "SDIT Cahaya Qur'ani", jenis: "Lembaga Pendidikan", penanggungJawab: "Ust. Fajar Nugraha",
+    kontak: "0815-9900-1122", alamat: "Jl. Pendidikan No. 5, Kec. Cibinong, Kab. Bogor, Jawa Barat",
+    alasan: "Mushaf untuk program tahsin & tahfidz siswa kelas 4-6.",
+    jumlahDiminta: 60, jumlahDisetujui: 60,
+    status: "Selesai", catatan: "Mushaf telah diambil langsung di UPQ. QR Code telah dipindai petugas gudang pada 20 Agu 2026.",
+    qrCode: "PM2026-0036-QR-77410",
+  },
+  {
+    id: "PM-2026-0035", tglAjukan: "05 Agu 2026",
+    lembaga: "Komunitas Peduli Dhuafa Amanah", jenis: "Organisasi Masyarakat", penanggungJawab: "Bapak Slamet Widodo",
+    kontak: "0878-1122-3344", alamat: "Jl. Kayu Manis No. 21, Kota Bogor, Jawa Barat",
+    alasan: "Permohonan untuk dibagikan langsung ke rumah-rumah warga dhuafa.",
+    jumlahDiminta: 300, jumlahDisetujui: null,
+    status: "Ditolak", catatan: "Ditolak: dokumen Surat Permohonan Resmi terindikasi tidak sah (tidak terverifikasi ke lembaga terkait) dan tujuan distribusi tidak sesuai ketentuan (distribusi perorangan, bukan lembaga/masjid).",
+  },
+];
+
+/* Ketersediaan stok Mushaf yang dirujuk saat tahap "Alokasi Stok" (selaras
+   dengan data internal-finish-good.html — produk Mushaf Standar). */
+const STOK_MUSHAF_TERSEDIA = 5600; // eks, Mushaf Al-Qur'an Standar Kemenag (A5)
+
 /* ---------- 8. Jadwal Kegiatan UPQ & Kunjungan Literasi ---------- */
 const DATA_JADWAL_UPQ = [
   { tgl: "03 Sep 2026", kegiatan: "Maintenance Preventive Mesin Cetak Offset", lokasi: "Area Produksi 1", status: "Terjadwal" },
@@ -310,16 +379,17 @@ function statusBadgeClass(status) {
   const map = {
     // positif
     "Diterima": "badge-ok", "Selesai": "badge-ok", "Lunas": "badge-ok", "Tersedia": "badge-ok",
-    "Sesuai": "badge-ok", "Terkonfirmasi": "badge-ok", "Selesai Dipakai": "badge-ok",
+    "Sesuai": "badge-ok", "Terkonfirmasi": "badge-ok", "Selesai Dipakai": "badge-ok", "Disetujui": "badge-ok",
     // proses / info
     "Diproses": "badge-info", "Proses": "badge-info", "Dikirim Pemasok": "badge-info",
     "Dalam Pengiriman": "badge-info", "Terjadwal": "badge-info", "Verifikasi Dokumen": "badge-info",
-    "Belum Diverifikasi": "badge-info", "Menunggu Verifikasi": "badge-info",
+    "Belum Diverifikasi": "badge-info", "Menunggu Verifikasi": "badge-info", "Verifikasi Stok": "badge-info",
     // warning
     "Stok Menipis": "badge-warn", "Menunggu Pembayaran": "badge-warn", "Menunggu Suku Cadang": "badge-warn",
+    "Revisi": "badge-warn", "Menunggu Persetujuan Pimpinan": "badge-warn",
     // danger
     "Dibatalkan": "badge-danger", "Batal": "badge-danger", "Habis": "badge-danger",
-    "Bermasalah": "badge-danger", "Tidak Sesuai": "badge-danger",
+    "Bermasalah": "badge-danger", "Tidak Sesuai": "badge-danger", "Ditolak": "badge-danger",
   };
   return map[status] || "badge-neutral";
 }
